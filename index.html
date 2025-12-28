@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>EnergyVerse Web App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { font-family: sans-serif; background: #0f0f0f; color: #fff; margin: 0; padding: 15px; text-align: center; }
+        .stat-card { background: #1e1e1e; border-radius: 15px; padding: 20px; margin-bottom: 20px; border-bottom: 4px solid #00d2ff; }
+        .balance { font-size: 28px; color: #00d2ff; font-weight: bold; }
+        .robot-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .robot-box { background: #252525; border-radius: 10px; padding: 10px; border: 1px solid #333; }
+        .robot-box img { width: 100%; border-radius: 5px; height: 100px; object-fit: cover; }
+        .btn-buy { background: #00d2ff; color: #000; border: none; width: 100%; padding: 8px; border-radius: 5px; font-weight: bold; margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <div class="stat-card">
+        <div id="balance-label">الرصيد / יתרה</div>
+        <div class="balance">$<span id="user-balance">0.00</span></div>
+        <div id="energy-label">الطاقة / אנרגיה</div>
+        <div id="user-energy">0.00</div>
+    </div>
+
+    <div class="robot-container" id="robots-list">
+        </div>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+        
+        const robotsData = [
+            {id: 1, name: "Iron Miner", price: 10, img: "https://i.postimg.cc/x8d9Pn3h/1766946530066.jpg"},
+            {id: 2, name: "Steel Crusher", price: 50, img: "https://i.postimg.cc/rspq9MNb/1766946570861.jpg"},
+            {id: 3, name: "Titanium Drill", price: 200, img: "https://i.postimg.cc/W4Jj95rn/1766944839730.png"},
+            {id: 4, name: "Power Nexus", price: 1000, img: "https://i.postimg.cc/0QRvh7dw/1766944146423.png"},
+            {id: 5, name: "Quantum Engine", price: 5000, img: "https://i.postimg.cc/SR4g0xPN/1766946983619.png"}
+        ];
+
+        const list = document.getElementById('robots-list');
+        robotsData.forEach(r => {
+            list.innerHTML += `
+                <div class="robot-box">
+                    <img src="${r.img}">
+                    <div style="font-size: 12px; margin: 5px 0;">${r.name}</div>
+                    <button class="btn-buy" onclick="buy(${r.id})">$${r.price}</button>
+                </div>
+            `;
+        });
+
+        function buy(id) {
+            tg.showConfirm(`هل تريد شراء الروبوت رقم ${id}?`, (ok) => {
+                if(ok) tg.sendData(JSON.stringify({action: 'buy', id: id}));
+            });
+        }
+    </script>
+</body>
+</html>
