@@ -3,56 +3,191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>EnergyVerse Web App</title>
+    <title>EnergyVerse Pro</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { font-family: sans-serif; background: #0f0f0f; color: #fff; margin: 0; padding: 15px; text-align: center; }
-        .stat-card { background: #1e1e1e; border-radius: 15px; padding: 20px; margin-bottom: 20px; border-bottom: 4px solid #00d2ff; }
-        .balance { font-size: 28px; color: #00d2ff; font-weight: bold; }
-        .robot-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .robot-box { background: #252525; border-radius: 10px; padding: 10px; border: 1px solid #333; }
-        .robot-box img { width: 100%; border-radius: 5px; height: 100px; object-fit: cover; }
-        .btn-buy { background: #00d2ff; color: #000; border: none; width: 100%; padding: 8px; border-radius: 5px; font-weight: bold; margin-top: 5px; }
+        :root {
+            --gold: #FFD700;
+            --dark-bg: #0a0a0a;
+            --neon-green: #39FF14;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* رأس الصفحة الفخم */
+        .header {
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(255, 215, 0, 0.1) 0%, transparent 100%);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .balance-container {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--gold);
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+            margin-bottom: 5px;
+        }
+
+        .balance-label {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.7;
+        }
+
+        /* منطقة البطارية */
+        .energy-section {
+            margin-top: 50px;
+            text-align: center;
+            width: 80%;
+        }
+
+        .battery-outer {
+            width: 100%;
+            height: 150px;
+            border: 4px solid #333;
+            border-radius: 20px;
+            position: relative;
+            padding: 5px;
+            display: flex;
+            align-items: flex-end;
+            background: #111;
+        }
+
+        .battery-inner {
+            width: 100%;
+            background: linear-gradient(to top, #00ff00, #39FF14);
+            border-radius: 12px;
+            transition: height 1s ease-in-out;
+            box-shadow: 0 0 20px var(--neon-green);
+        }
+
+        .battery-cap {
+            width: 40px;
+            height: 15px;
+            background: #333;
+            position: absolute;
+            top: -19px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 5px 5px 0 0;
+        }
+
+        .energy-value {
+            margin-top: 15px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* الأزرار العالمية */
+        .action-btn {
+            margin-top: 40px;
+            padding: 15px 40px;
+            background: var(--gold);
+            color: black;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+            transition: 0.3s;
+        }
+
+        .action-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* الروبوتات المتحركة */
+        .robot-status {
+            position: absolute;
+            bottom: 30px;
+            width: 90%;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .status-item { text-align: center; }
+        .status-val { color: var(--gold); font-weight: bold; }
     </style>
 </head>
 <body>
-    <div class="stat-card">
-        <div id="balance-label">الرصيد / יתרה</div>
-        <div class="balance">$<span id="user-balance">0.00</span></div>
-        <div id="energy-label">الطاقة / אנרגיה</div>
-        <div id="user-energy">0.00</div>
+
+    <div class="header">
+        <div class="balance-container">$<span id="balance">0.00</span></div>
+        <div id="balance-lbl" class="balance-label">رصيدك الحالي</div>
     </div>
 
-    <div class="robot-container" id="robots-list">
+    <div class="energy-section">
+        <div class="battery-outer">
+            <div class="battery-cap"></div>
+            <div id="energy-fill" class="battery-inner" style="height: 0%"></div>
         </div>
+        <div class="energy-value"><span id="energy-perc">0</span>%</div>
+    </div>
+
+    <button id="collect-btn" class="action-btn" onclick="collectEnergy()">جمع الطاقة الآن</button>
+
+    <div class="robot-status">
+        <div class="status-item">
+            <div id="prod-lbl" style="font-size: 12px; opacity: 0.6;">الإنتاج/ساعة</div>
+            <div class="status-val">+<span id="prod-rate">0</span></div>
+        </div>
+        <div class="status-item">
+            <div id="robots-lbl" style="font-size: 12px; opacity: 0.6;">الروبوتات</div>
+            <div class="status-val" id="robot-count">0</div>
+        </div>
+    </div>
 
     <script>
-        let tg = window.Telegram.WebApp;
-        tg.expand();
+        const webapp = window.Telegram.WebApp;
+        webapp.expand();
+
+        // جلب البيانات من الرابط (التي أرسلها البوت)
+        const urlParams = new URLSearchParams(window.location.search);
+        const balance = urlParams.get('balance') || '0.00';
+        const lang = urlParams.get('lang') || 'ar';
         
-        const robotsData = [
-            {id: 1, name: "Iron Miner", price: 10, img: "https://i.postimg.cc/x8d9Pn3h/1766946530066.jpg"},
-            {id: 2, name: "Steel Crusher", price: 50, img: "https://i.postimg.cc/rspq9MNb/1766946570861.jpg"},
-            {id: 3, name: "Titanium Drill", price: 200, img: "https://i.postimg.cc/W4Jj95rn/1766944839730.png"},
-            {id: 4, name: "Power Nexus", price: 1000, img: "https://i.postimg.cc/0QRvh7dw/1766944146423.png"},
-            {id: 5, name: "Quantum Engine", price: 5000, img: "https://i.postimg.cc/SR4g0xPN/1766946983619.png"}
-        ];
+        // تحديث الرصيد
+        document.getElementById('balance').innerText = balance;
 
-        const list = document.getElementById('robots-list');
-        robotsData.forEach(r => {
-            list.innerHTML += `
-                <div class="robot-box">
-                    <img src="${r.img}">
-                    <div style="font-size: 12px; margin: 5px 0;">${r.name}</div>
-                    <button class="btn-buy" onclick="buy(${r.id})">$${r.price}</button>
-                </div>
-            `;
-        });
+        // تغيير اللغة للواجهة
+        if(lang === 'he') {
+            document.getElementById('balance-lbl').innerText = 'היתרה שלך';
+            document.getElementById('collect-btn').innerText = 'אסוף אנרגיה';
+            document.getElementById('prod-lbl').innerText = 'ייצור לשעה';
+            document.getElementById('robots-lbl').innerText = 'רובוטים';
+        }
 
-        function buy(id) {
-            tg.showConfirm(`هل تريد شراء الروبوت رقم ${id}?`, (ok) => {
-                if(ok) tg.sendData(JSON.stringify({action: 'buy', id: id}));
-            });
+        // محاكاة حركة البطارية (للعرض الجمالي)
+        let perc = 0;
+        setInterval(() => {
+            if(perc < 75) { // هنا نربطها لاحقاً ببيانات حقيقية
+                perc += 0.5;
+                document.getElementById('energy-fill').style.height = perc + '%';
+                document.getElementById('energy-perc').innerText = Math.floor(perc);
+            }
+        }, 1000);
+
+        function collectEnergy() {
+            webapp.showConfirm(lang === 'ar' ? "هل تريد جمع الطاقة وتحويلها لفلوس؟" : "האם תרצה לאסוף את האנרגיה ולהמיר לכסף?");
         }
     </script>
 </body>
