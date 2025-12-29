@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>EnergyVerse</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -14,21 +14,48 @@
             <span class="stat-value gold-text">$<span id="balance">0.00</span></span>
         </div>
         <div class="stat-box">
-            <span class="stat-label">شحن الطاقة</span>
-            <div class="battery-container"><div id="energy-fill" class="battery-level"></div></div>
+            <span class="stat-label">الطاقة الإجمالية</span>
+            <div class="battery-container">
+                <div id="energy-fill" class="battery-level"></div>
+            </div>
             <span id="energy-text" class="stat-value">0%</span>
         </div>
         <div class="stat-box">
             <span class="stat-label">الجيش الآلي</span>
-            <span id="robot-count" class="stat-value">0</span>
+            <span class="stat-value">🤖 <span id="robot-count">0</span></span>
         </div>
         <div class="stat-box">
             <span class="stat-label">الإحالات</span>
-            <span id="ref-count" class="stat-value">0</span>
+            <span class="stat-value">👥 <span id="ref-count">0</span></span>
         </div>
     </div>
 
-    <div id="robot-list" class="robot-grid"></div>
+    <div class="robot-grid">
+        <div class="robot-card">
+            <img src="https://i.postimg.cc/rspq9MNb/1766946570861.jpg" class="robot-img">
+            <h3>Iron Miner</h3>
+            <p>إنتاج: 1/ساعة | $10</p>
+            <button class="buy-btn" onclick="buyRobot(1)">تطوير الآن</button>
+        </div>
+        <div class="robot-card">
+            <img src="https://i.postimg.cc/x8d9Pn3h/1766946530066.jpg" class="robot-img">
+            <h3>Steel Crusher</h3>
+            <p>إنتاج: 5/ساعة | $50</p>
+            <button class="buy-btn" onclick="buyRobot(2)">تطوير الآن</button>
+        </div>
+        <div class="robot-card">
+            <img src="https://i.postimg.cc/W4Jj95rn/1766944839730.png" class="robot-img">
+            <h3>Titanium Drill</h3>
+            <p>إنتاج: 20/ساعة | $200</p>
+            <button class="buy-btn" onclick="buyRobot(3)">تطوير الآن</button>
+        </div>
+        <div class="robot-card">
+            <img src="https://i.postimg.cc/0QRvh7dw/1766944146423.png" class="robot-img">
+            <h3>Power Nexus</h3>
+            <p>إنتاج: 110/ساعة | $1000</p>
+            <button class="buy-btn" onclick="buyRobot(4)">تطوير الآن</button>
+        </div>
+    </div>
 
     <script src="app.js"></script>
 </body>
