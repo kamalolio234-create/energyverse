@@ -7,7 +7,7 @@ let lang = params.get("lang") || "ar";
 const balanceDisplay = document.getElementById("balanceDisplay");
 balanceDisplay.innerText = `رصيدك: ${balance} IM`;
 
-// بطارية الطاقة
+// البطارية
 const batteryFill = document.getElementById("batteryFill");
 let batteryPercent = Math.min((balance / 100) * 100, 100);
 batteryFill.style.width = batteryPercent + "%";
