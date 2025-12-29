@@ -3,15 +3,25 @@ body {
   color: #FFD700;
   font-family: 'Arial', sans-serif;
   text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  padding: 50px 20px;
 }
 
 h1 {
-  font-size: 2em;
-  margin-top: 50px;
+  font-size: 2.5em;
+  margin-bottom: 10px;
 }
 
-p {
+.welcome {
   font-size: 1.2em;
+  margin-bottom: 30px;
+}
+
+.energy-section {
   margin-top: 20px;
 }
 
@@ -23,9 +33,31 @@ button {
   font-size: 1em;
   cursor: pointer;
   border-radius: 10px;
-  margin-top: 30px;
 }
 
 button:hover {
   background-color: #00cc00;
+}
+
+#balanceDisplay {
+  margin-top: 20px;
+  font-size: 1.2em;
+}
+
+/* بطارية الطاقة */
+.battery {
+  width: 200px;
+  height: 25px;
+  border: 2px solid #FFD700;
+  border-radius: 5px;
+  margin: 20px auto 0;
+  background: #222;
+}
+
+.battery-fill {
+  height: 100%;
+  width: 0%;
+  background-color: #00FF00;
+  border-radius: 3px;
+  transition: width 0.3s ease-in-out;
 }
