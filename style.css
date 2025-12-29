@@ -1,112 +1,13 @@
-/* ENERGYVERSE OFFICIAL STYLE SHEET 
-   Target: Modern, Tech, Gold Accents
-*/
-
-:root {
-    --bg-dark: #0A0A0B;        /* الخلفية الداكنة العميقة */
-    --card-bg: #151517;        /* خلفية البطاقات */
-    --gold-gradient: linear-gradient(135deg, #FFD700, #FFA500); /* تدرج الذهب */
-    --text-main: #FFFFFF;      /* النص الأبيض */
-    --text-dim: #A0A0A0;       /* النص الباهت للتفاصيل */
-    --blue-accent: #00D2FF;    /* لون شريط الطاقة */
-}
-
-body {
-    background-color: var(--bg-dark);
-    color: var(--text-main);
-    font-family: 'Inter', sans-serif;
-    margin: 0;
-    padding: 15px;
-    direction: rtl; /* لدعم اللغة العربية */
-}
-
-/* تصميم الهيدر (الرصيد والطاقة) */
-.header-container {
-    background: var(--card-bg);
-    border-radius: 25px;
-    padding: 25px;
-    text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    margin-bottom: 20px;
-}
-
-.balance-title {
-    font-size: 0.8rem;
-    color: var(--text-dim);
-    margin-bottom: 5px;
-}
-
-.balance-amount {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: var(--text-main);
-    margin: 10px 0;
-}
-
-/* شبكة الروبوتات (Cards Grid) */
-.robot-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* عمودين كما في الصورة */
-    gap: 15px;
-    margin-bottom: 80px; /* مساحة للقائمة السفلية */
-}
-
-.robot-card {
-    background: var(--card-bg);
-    border-radius: 20px;
-    padding: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    text-align: center;
-}
-
-.robot-card img {
-    width: 100%;
-    border-radius: 15px;
-    margin-bottom: 12px;
-}
-
-.robot-name {
-    font-weight: bold;
-    font-size: 0.9rem;
-    margin-bottom: 8px;
-}
-
-/* أزرار الشراء (Buy Buttons) */
-.buy-btn {
-    background: var(--gold-gradient);
-    border: none;
-    border-radius: 12px;
-    color: #000;
-    padding: 8px 0;
-    width: 100%;
-    font-weight: 900;
-    font-size: 0.8rem;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
-}
-
-/* القائمة السفلية (Bottom Navigation) */
-.bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(20, 20, 22, 0.95);
-    backdrop-filter: blur(10px); /* تأثير الزجاج */
-    display: flex;
-    justify-content: space-around;
-    padding: 15px 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.nav-item {
-    color: var(--text-dim);
-    font-size: 0.7rem;
-    text-decoration: none;
-    text-align: center;
-}
-
-.nav-item.active {
-    color: var(--primary-gold);
-}
+:root { --bg-dark: #0A0A0B; --card-bg: #1C1C1E; --primary-gold: #FFD700; --accent-blue: #00D2FF; --text-white: #FFFFFF; }
+body { background-color: var(--bg-dark); color: var(--text-white); font-family: 'Segoe UI', sans-serif; margin: 0; padding: 15px; direction: rtl; }
+.header-stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+.stat-box { background: var(--card-bg); padding: 12px; border-radius: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+.stat-label { display: block; font-size: 0.7rem; opacity: 0.6; }
+.stat-value { font-size: 1rem; font-weight: bold; }
+.gold-text { color: var(--primary-gold); }
+.battery-container { width: 40px; height: 15px; border: 1.5px solid #444; border-radius: 4px; margin: 5px auto; padding: 1.5px; }
+.battery-level { height: 100%; background: var(--accent-blue); width: 0%; transition: width 0.5s; }
+.robot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.canva-card { background: var(--card-bg); border-radius: 20px; padding: 10px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+.robot-img { width: 100%; border-radius: 15px; }
+.cta-button { background: linear-gradient(135deg, var(--primary-gold), #FFA500); border: none; border-radius: 10px; width: 100%; padding: 8px; font-weight: bold; cursor: pointer; margin-top: 5px; }
