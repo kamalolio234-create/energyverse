@@ -1,56 +1,40 @@
-// ENERGYVERSE APP ENGINE - JavaScript (Official Final Version)
-const tg = window.Telegram.WebApp;
-
-// 1. إعداد واجهة تيليجرام
-tg.expand(); 
-tg.ready();
-
-// استخراج معرف المستخدم من الرابط
-const urlParams = new URLSearchParams(window.location.search);
-const userId = urlParams.get('user_id');
-
-// 2. تحديث البيانات (رابط السيرفر الصحيح: Bubjad)
+// تحديث البيانات مع تأثير العداد المتغير
 async function fetchUserData() {
     try {
         const response = await fetch(`https://Bubjad.pythonanywhere.com/api/user_data/${userId}`);
         const data = await response.json();
 
-        // تحديث الأرقام في الواجهة
-        if(document.getElementById('balance')) document.getElementById('balance').innerText = data.balance.toFixed(2);
-        if(document.getElementById('total-energy')) document.getElementById('total-energy').innerText = Math.floor(data.energy);
+        // تأثير عداد الأرقام (تحديث الرصيد بسلاسة)
+        animateValue("balance", parseFloat(document.getElementById('balance').innerText), data.balance, 1000);
         
-    } catch (error) {
-        console.error("خطأ في الاتصال بالسيرفر:", error);
+        // تحديث عدادات الروبوتات والإحالات الجديدة
+        document.getElementById('robot-count').innerText = data.robot_count || 0;
+        document.getElementById('ref-count').innerText = data.referrals || 0;
+
+        // نظام شحن الطاقة بنسبة %
+        const energyPercent = Math.min(Math.floor(data.energy), 100);
+        const energyBar = document.getElementById('energy-fill');
+        energyBar.style.width = energyPercent + "%";
+        document.getElementById('energy-text').innerText = energyPercent + "%";
+
+    } catch (error) { console.error("Connection Error"); }
+}
+
+function animateValue(id, start, end, duration) {
+    let obj = document.getElementById(id);
+    let range = end - start;
+    let minTimer = 50;
+    let step = range / (duration / minTimer);
+    let startTime = new Date().getTime();
+    let endTime = startTime + duration;
+    let timer;
+
+    function run() {
+        let now = new Date().getTime();
+        let remaining = Math.max((endTime - now) / duration, 0);
+        let value = end - (remaining * range);
+        obj.innerText = value.toFixed(2);
+        if (value == end) clearInterval(timer);
     }
+    timer = setInterval(run, minTimer);
 }
-
-// 3. وظيفة شراء الروبوتات
-function buyRobot(robotId) {
-    tg.HapticFeedback.impactOccurred('medium');
-
-    tg.showConfirm(`هل تريد تأكيد شراء هذا الروبوت؟`, (ok) => {
-        if (ok) {
-            // إرسال الطلب إلى السيرفر الصحيح
-            fetch(`https://Bubjad.pythonanywhere.com/api/buy`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    user_id: userId,
-                    robot_id: robotId
-                })
-            })
-            .then(res => res.json())
-            .then(result => {
-                if (result.success) {
-                    tg.showAlert("✅ تمت عملية الشراء بنجاح!");
-                    fetchUserData(); 
-                } else {
-                    tg.showAlert("❌ " + result.message);
-                }
-            })
-            .catch(err => tg.showAlert("❌ فشل الاتصال بالسيرفر"));
-        }
-    });
-}
-
-// 4. وظيفة جمع الطاقة
