@@ -1,48 +1,153 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/dist/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-    <title>EnergyVerse HD</title>
+    <title>EnergyVerse Mining</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --primary-gold: #FFD700;
+            --bg-dark: #0A0A0B;
+            --card-gray: #1C1C1E;
+            --text-white: #FFFFFF;
+            --accent-blue: #00D2FF;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0; padding: 15px;
+            overflow-x: hidden;
+        }
+
+        /* الهيدر المطور */
+        .header-stats {
+            display: flex;
+            justify-content: space-around;
+            background: linear-gradient(145deg, #1e1e21, #161618);
+            border-radius: 25px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid var(--glass);
+            margin-bottom: 25px;
+        }
+
+        .stat-item { text-align: center; }
+        .stat-value { display: block; font-size: 1.2rem; font-weight: bold; color: var(--primary-gold); }
+        .stat-label { font-size: 0.7rem; opacity: 0.6; text-transform: uppercase; }
+
+        /* شبكة الروبوتات */
+        .robot-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .canva-card {
+            background: var(--card-gray);
+            border-radius: 28px;
+            padding: 12px;
+            border: 1px solid var(--glass);
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .canva-card:hover { transform: translateY(-5px); border-color: var(--primary-gold); }
+
+        .robot-img {
+            width: 100%;
+            height: 120px;
+            border-radius: 20px;
+            object-fit: cover;
+            margin-bottom: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        h4 { margin: 8px 0; font-size: 0.9rem; letter-spacing: 0.5px; }
+
+        /* شريط الطاقة والإنتاج */
+        .info-row { display: flex; justify-content: space-between; font-size: 0.65rem; margin-bottom: 5px; opacity: 0.8; }
+        
+        .progress-container {
+            width: 100%;
+            background: #333;
+            height: 6px;
+            border-radius: 10px;
+            margin: 8px 0 15px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill { height: 100%; background: var(--accent-blue); width: 0%; transition: width 0.5s; }
+
+        /* زر الشراء Canva Style */
+        .cta-button {
+            background: linear-gradient(135deg, var(--primary-gold), #FFA500);
+            border: none;
+            border-radius: 15px;
+            color: #000;
+            font-weight: 800;
+            padding: 10px;
+            width: 100%;
+            font-size: 0.75rem;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 
-    <div id="p-home" class="page" style="display:block;">
-        <div class="header">
-            <h2 id="main-bal">0.00 IM</h2>
-            <div class="lvl-badge">LEVEL: PRO</div>
+    <div class="header-stats">
+        <div class="stat-item">
+            <span class="stat-label">رصيدك الحالي</span>
+            <span class="stat-value">$<span id="balance">100.00</span></span>
         </div>
-        <div class="main-target" id="tap-target">
-            <div class="bolt-glow"></div>
-            <i class="fas fa-bolt"></i>
-        </div>
-        <div style="text-align:center;">
-            <button class="collect-btn" onclick="window.Telegram.WebApp.HapticFeedback.notificationOccurred('success')">جمع الأرباح ⚡</button>
+        <div class="stat-item">
+            <span class="stat-label">الطاقة الإجمالية</span>
+            <span class="stat-value"><span id="total-energy">0</span>%</span>
         </div>
     </div>
 
-    <div id="p-robots" class="page" style="display:none;">
-        <div id="robots-list"></div>
-    </div>
-
-    <div id="p-info" class="page" style="display:none; padding:20px;">
-        <h2 style="color:var(--gold);">EnergyVerse Story</h2>
-        <p style="color:#ccc; line-height:1.8;">في عام 2025، أصبحت الطاقة هي العملة الأقوى. ابدأ رحلتك الآن وسيطر على المستقبل الرقمي عبر بناء جيش من الروبوتات المتطورة.</p>
-        <div class="contact-box" style="background:#111; padding:20px; border-radius:15px; border:1px solid #222;">
-            <h3 style="color:var(--neon);">Contact Us</h3>
-            <p><i class="fab fa-telegram"></i> @EnergyVerse_Support</p>
-            <p><i class="fab fa-tiktok"></i> EnergyVerse.Official</p>
+    <div class="robot-grid" id="robot-list">
         </div>
-    </div>
 
-    <div class="nav">
-        <div class="nav-item active" onclick="showPage('p-home', this)"><i class="fas fa-home"></i><span>الرئيسية</span></div>
-        <div class="nav-item" onclick="showPage('p-robots', this)"><i class="fas fa-robot"></i><span>الروبوتات</span></div>
-        <div class="nav-item" onclick="showPage('p-info', this)"><i class="fas fa-info-circle"></i><span>عن اللعبة</span></div>
-    </div>
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand();
 
-    <script src="app.js"></script>
+        const robotsData = [
+            {id: 1, name: "Iron Miner", price: 10, rate: 1, img: "https://i.postimg.cc/x8d9Pn3h/1766946530066.jpg"},
+            {id: 2, name: "Steel Crusher", price: 50, rate: 5, img: "https://i.postimg.cc/rspq9MNb/1766946570861.jpg"},
+            {id: 3, name: "Titanium Drill", price: 200, rate: 20, img: "https://i.postimg.cc/W4Jj95rn/1766944839730.png"},
+            {id: 4, name: "Power Nexus", price: 1000, rate: 110, img: "https://i.postimg.cc/0QRvh7dw/1766944146423.png"},
+            {id: 5, name: "Quantum Engine", price: 5000, rate: 600, img: "https://i.postimg.cc/SR4g0xPN/1766946983619.png"}
+        ];
+
+        const list = document.getElementById('robot-list');
+        robotsData.forEach(r => {
+            list.innerHTML += `
+                <div class="canva-card">
+                    <img src="${r.img}" class="robot-img">
+                    <h4>${r.name}</h4>
+                    <div class="info-row">
+                        <span>إنتاج: ${r.rate}/ساعة</span>
+                        <span>$${r.price}</span>
+                    </div>
+                    <div class="progress-container"><div class="progress-fill" id="p${r.id}" style="width: 40%"></div></div>
+                    <button class="cta-button" onclick="buy(${r.id})">تطوير الآن</button>
+                </div>
+            `;
+        });
+
+        function buy(id) {
+            tg.HapticFeedback.impactOccurred('medium');
+            tg.showConfirm(`هل تود شراء/تطوير هذا الروبوت؟`, (ok) => {
+                if(ok) tg.sendData(JSON.stringify({action: 'buy', robot_id: id}));
+            });
+        }
+    </script>
 </body>
 </html>
