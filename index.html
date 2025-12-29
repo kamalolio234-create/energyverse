@@ -3,59 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>EnergyVerse Pro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/dist/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="home" class="page active">
-        <div class="header">
-            <span class="balance-label">BALANCE / יתרה</span>
-            <div class="balance-amount" id="main-bal">0.00</div>
-            <div style="color:var(--gold); font-size:12px; border:1px solid var(--gold); display:inline-block; padding:2px 12px; border-radius:15px;">LEVEL: PRO</div>
+    <div id="p-home" class="page" style="display:block; text-align:center; padding-top:40px;">
+        <h2 style="color:var(--gold); font-size:45px; margin:0;">0.00 IM</h2>
+        <div class="main-target" onclick="tg.HapticFeedback.impactOccurred('medium')">
+            <div class="bolt-glow"></div>
+            <i class="fas fa-bolt"></i>
         </div>
+        <button style="width:80%; background:var(--gold); border:none; padding:20px; border-radius:15px; font-weight:bold; font-size:18px;">جمع الأرباح ⚡</button>
+    </div>
 
-        <div class="energy-container">
-            <div class="main-circle" id="tap-target">
-                <div class="circle-glow"></div>
-                <i class="fas fa-bolt"></i>
-            </div>
+    <div id="p-robots" class="page" style="display:none;">
+        <div id="robots-list"></div>
+    </div>
+
+    <div id="p-info" class="page" style="display:none; padding:20px;">
+        <h2 style="color:var(--gold);">EnergyVerse Story</h2>
+        <p style="color:#aaa; line-height:1.8;">في عام 2025، انهار النظام المالي العالمي، وبقيت الطاقة هي العملة الوحيدة المعترف بها. هنا تبدأ رحلتك في جمع الطاقة وبناء جيش من الروبوتات للسيطرة على المستقبل الرقمي.</p>
+        <div style="background:#111; padding:20px; border-radius:15px; margin-top:20px;">
+            <h3 style="color:var(--neon);">Contact Us</h3>
+            <p><i class="fab fa-telegram"></i> @EnergyVerse_Support</p>
+            <p><i class="fab fa-tiktok"></i> EnergyVerse.Official</p>
         </div>
-
-        <div class="stats-grid">
-            <div class="stat-card"><span>Production / ייצור</span><b id="prod-val">0.00</b></div>
-            <div class="stat-card"><span>Storage / אחסון</span><b id="max-val">100</b></div>
-        </div>
-        
-        <button id="collect-btn" style="width:90%; margin:30px 5%; background:var(--gold); border:none; padding:18px; border-radius:15px; font-weight:bold; font-size:18px;">جمع الأرباح ⚡</button>
     </div>
 
-    <div id="robots" class="page">
-        <h2 style="color:var(--gold); border-right:4px solid var(--gold); padding-right:10px;">متجر الروبوتات 🤖</h2>
-        <div id="robots-list-hd">
-            </div>
-    </div>
-
-    <div id="leader" class="page">
-        <h2 style="color:var(--gold); text-align:center;">لوحة الأبطال 🏆</h2>
-        <div id="leaderboard-content"></div>
-    </div>
-
-    <div id="info" class="page">
-        <h2 style="color:var(--gold);">قصة EnergyVerse ✨</h2>
-        <p style="color:#ccc; line-height:1.6;">بدأت رحلتنا في عام 2025 كحلم لربط عالم الألعاب بالعملات الرقمية. EnergyVerse ليست مجرد لعبة، بل هي محاكي لتعدين الطاقة في المستقبل، حيث كل ضغطة تقربك من امتلاك إمبراطوريتك الخاصة.</p>
-        
-        <h3 style="color:var(--gold); margin-top:30px;">تواصل معنا 🌐</h3>
-        <a href="#" class="stat-card" style="display:block; text-decoration:none; margin-bottom:10px;"><i class="fab fa-telegram"></i> قناة التلغرام الرسمية</a>
-        <a href="#" class="stat-card" style="display:block; text-decoration:none;"><i class="fab fa-tiktok"></i> مجتمع التيك توك</a>
-    </div>
-
-    <div class="nav-bar">
-        <div class="nav-item active" onclick="showPage('home', this)"><i class="fas fa-home"></i>الرئيسية</div>
-        <div class="nav-item" onclick="showPage('robots', this)"><i class="fas fa-robot"></i>الروبوتات</div>
-        <div class="nav-item" onclick="showPage('leader', this)"><i class="fas fa-trophy"></i>المتصدرين</div>
-        <div class="nav-item" onclick="showPage('info', this)"><i class="fas fa-info-circle"></i>عن اللعبة</div>
+    <div class="nav">
+        <div class="nav-item active" onclick="showPage('p-home', this)"><i class="fas fa-home"></i><span>الرئيسية</span></div>
+        <div class="nav-item" onclick="showPage('p-robots', this)"><i class="fas fa-robot"></i><span>الروبوتات</span></div>
+        <div class="nav-item" onclick="showPage('p-info', this)"><i class="fas fa-info-circle"></i><span>عن اللعبة</span></div>
     </div>
 
     <script src="app.js"></script>
