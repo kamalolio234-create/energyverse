@@ -1,76 +1,71 @@
 :root {
     --gold: #FFD700;
-    --neon-green: #39FF14;
-    --dark-bg: #000000;
-    --card-bg: #111111;
-    --text-gray: #888888;
+    --neon: #39FF14;
+    --dark: #050505;
+    --card: #121212;
 }
 
 body {
-    background-color: var(--dark-bg);
+    background: var(--dark);
     color: white;
-    font-family: 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Cairo', sans-serif;
     margin: 0; padding: 0;
-    overflow-x: hidden;
     direction: rtl;
 }
 
-/* Header & Balance */
-.header { text-align: center; padding: 30px 20px; }
-.balance-label { font-size: 14px; color: var(--text-gray); letter-spacing: 2px; }
-.balance-amount { font-size: 50px; font-weight: 900; color: var(--gold); margin: 5px 0; text-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
+.lang-he { direction: ltr !important; }
 
-/* The Main Energy Circle (HD) */
-.energy-container { display: flex; justify-content: center; margin: 20px 0; position: relative; }
-.main-circle {
-    width: 200px; height: 200px;
-    border-radius: 50%;
-    background: radial-gradient(circle, #111 0%, #000 100%);
-    border: 4px solid #222;
+/* الدائرة المركزية HD */
+.main-target {
+    width: 220px; height: 220px;
+    background: radial-gradient(circle, #1a1a1a 0%, #000 100%);
+    border-radius: 50%; margin: 40px auto;
     display: flex; align-items: center; justify-content: center;
     position: relative; cursor: pointer;
-    box-shadow: 0 0 30px rgba(0,0,0,1);
-    transition: transform 0.1s;
+    border: 3px solid #222;
+    box-shadow: 0 0 40px rgba(0,0,0,1);
 }
-.main-circle:active { transform: scale(0.95); }
-.main-circle i { font-size: 80px; color: var(--gold); z-index: 2; text-shadow: 0 0 15px var(--gold); }
-.circle-glow {
-    position: absolute; width: 110%; height: 110%;
-    border-radius: 50%; border: 2px solid var(--neon-green);
-    box-shadow: 0 0 20px var(--neon-green), inset 0 0 20px var(--neon-green);
-    animation: pulse 2s infinite; opacity: 0.6;
+.main-target i { 
+    font-size: 100px; color: var(--gold); 
+    filter: drop-shadow(0 0 15px var(--gold));
+    z-index: 2;
+}
+.bolt-glow {
+    position: absolute; width: 100%; height: 100%;
+    border-radius: 50%; border: 2px solid var(--neon);
+    box-shadow: 0 0 25px var(--neon);
+    animation: pulse 2s infinite; opacity: 0.5;
 }
 
-/* Stats Cards */
-.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px; }
-.stat-card { background: var(--card-bg); padding: 15px; border-radius: 15px; border: 1px solid #222; text-align: center; }
-.stat-card span { font-size: 11px; color: var(--text-gray); display: block; }
-.stat-card b { font-size: 20px; color: var(--neon-green); margin-top: 5px; display: block; }
+/* بطاقة الروبوت (HD Story Mode) */
+.robot-card {
+    background: var(--card); border-radius: 20px;
+    margin: 20px; padding: 20px; border: 1px solid #222;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+.robot-img {
+    width: 100%; height: 250px; 
+    object-fit: cover; border-radius: 15px;
+    border: 1px solid var(--gold); margin-bottom: 15px;
+}
+.robot-title { color: var(--gold); font-size: 24px; margin: 10px 0; }
+.robot-story { color: #ccc; font-size: 14px; line-height: 1.7; margin-bottom: 15px; text-align: justify; }
+.robot-stats { 
+    display: flex; justify-content: space-between; 
+    background: #000; padding: 10px; border-radius: 10px; border: 1px dashed #444;
+}
 
-/* Navigation Bottom Bar (Fixed) */
-.nav-bar {
+/* القائمة السفلية (أكبر وأجمل) */
+.nav {
     position: fixed; bottom: 0; width: 100%;
-    background: rgba(5,5,5,0.95); backdrop-filter: blur(10px);
-    display: flex; justify-content: space-around;
-    padding: 15px 0; border-top: 1px solid #222; z-index: 1000;
+    background: rgba(0,0,0,0.9); backdrop-filter: blur(10px);
+    display: flex; padding: 20px 0; border-top: 2px solid #111;
 }
-.nav-item { color: var(--text-gray); text-align: center; font-size: 11px; cursor: pointer; flex: 1; }
-.nav-item.active { color: var(--gold); }
-.nav-item i { font-size: 24px; display: block; margin-bottom: 5px; }
-
-/* Pages System */
-.page { display: none; padding: 20px; padding-bottom: 100px; animation: fadeIn 0.4s ease; }
-.page.active { display: block; }
-
-/* Robots List HD */
-.robot-box {
-    background: var(--card-bg); border-radius: 20px; padding: 15px;
-    margin-bottom: 15px; display: flex; align-items: center; border: 1px solid #222;
+.nav-item { 
+    flex: 1; text-align: center; color: #666; 
+    font-size: 14px; font-weight: bold; transition: 0.3s;
 }
-.robot-img { width: 70px; height: 70px; border-radius: 12px; margin-left: 15px; object-fit: cover; border: 1px solid var(--gold); }
-.robot-info { flex: 1; }
-.robot-info h4 { margin: 0; color: var(--gold); font-size: 18px; }
-.robot-info p { margin: 5px 0; font-size: 12px; color: #aaa; line-height: 1.4; }
+.nav-item.active { color: var(--gold); transform: translateY(-5px); }
+.nav-item i { font-size: 28px; display: block; margin-bottom: 8px; }
 
-@keyframes pulse { 0% { transform: scale(1); opacity: 0.4; } 50% { transform: scale(1.05); opacity: 0.8; } 100% { transform: scale(1); opacity: 0.4; } }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.08); } 100% { transform: scale(1); } }
