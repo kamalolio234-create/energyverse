@@ -3,207 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>EnergyVerse Pro - Web3 Game</title>
+    <title>EnergyVerse Pro - Master Edition</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/dist/css/all.min.css">
     <style>
-        :root { --gold: #FFD700; --neon: #39FF14; --dark: #050505; --card: rgba(255, 255, 255, 0.05); }
+        :root { --gold: #FFD700; --neon: #39FF14; --dark: #000000; --card: rgba(255, 255, 255, 0.05); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--dark); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; overflow: hidden; direction: rtl; }
+        body { background: var(--dark); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; overflow: hidden; height: 100vh; direction: rtl; }
         
-        /* Navigation */
-        .nav { position: fixed; bottom: 0; width: 100%; background: rgba(10,10,10,0.95); display: flex; border-top: 1px solid #222; padding: 10px 0; z-index: 1000; backdrop-filter: blur(10px); }
-        .nav-btn { flex: 1; color: #666; font-size: 10px; text-align: center; cursor: pointer; transition: 0.3s; }
-        .nav-btn.active { color: var(--gold); transform: translateY(-3px); }
-        .nav-btn i { font-size: 22px; display: block; margin-bottom: 4px; }
+        /* التحويل للعبرية */
+        .lang-he { direction: ltr !important; text-align: left !important; }
 
-        /* Pages System */
-        .page { display: none; padding: 20px; height: 90vh; overflow-y: auto; padding-bottom: 100px; animation: fadeIn 0.4s ease; }
+        /* الأيقونة الذهبية العائمة (كما في الصورة) */
+        .coin-container { display: flex; justify-content: center; align-items: center; margin: 20px 0; }
+        .main-coin { width: 140px; height: 140px; background: radial-gradient(circle, var(--gold) 0%, #b8860b 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 50px rgba(255, 215, 0, 0.4); animation: pulse 2s infinite; cursor: pointer; border: 5px solid rgba(255,215,0,0.2); }
+        .main-coin i { font-size: 60px; color: black; }
+        @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 30px rgba(255, 215, 0, 0.4); } 50% { transform: scale(1.05); box-shadow: 0 0 60px rgba(255, 215, 0, 0.7); } 100% { transform: scale(1); box-shadow: 0 0 30px rgba(255, 215, 0, 0.4); } }
+
+        /* الرصيد (ستايل الصورة) */
+        .top-balance { text-align: center; padding: 20px; }
+        .top-balance h1 { font-size: 45px; margin: 0; color: var(--gold); font-weight: 900; text-shadow: 0 0 15px rgba(255,215,0,0.2); }
+        .top-balance span { font-size: 14px; opacity: 0.6; text-transform: uppercase; letter-spacing: 2px; }
+
+        /* الصفحات */
+        .page { display: none; padding: 20px; height: 85vh; overflow-y: auto; padding-bottom: 120px; animation: slideUp 0.3s ease-out; }
         .page.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Header & Dashboard */
-        .header { text-align: center; margin-bottom: 25px; background: linear-gradient(180deg, rgba(255,215,0,0.05) 0%, transparent 100%); padding: 20px; border-radius: 0 0 30px 30px; }
-        .balance { font-size: 42px; font-weight: 900; color: var(--gold); text-shadow: 0 0 20px rgba(255,215,0,0.3); }
-        .lvl-badge { background: #1a1a1a; border: 1px solid var(--gold); padding: 4px 15px; border-radius: 50px; font-size: 12px; color: var(--gold); letter-spacing: 1px; }
-        
-        /* Battery & Stats */
-        .stat-card { background: var(--card); padding: 15px; border-radius: 15px; border: 1px solid #222; display: flex; justify-content: space-around; margin: 15px 0; }
-        .stat-item { text-align: center; }
-        .stat-val { display: block; font-weight: bold; color: var(--gold); font-size: 18px; }
-        .stat-lbl { font-size: 11px; opacity: 0.6; }
+        /* شريط التنقل (الأسود الفاخر) */
+        .nav { position: fixed; bottom: 0; width: 100%; background: #0a0a0a; display: flex; border-top: 1px solid #1a1a1a; padding: 15px 0; z-index: 1000; }
+        .nav-btn { flex: 1; color: #555; font-size: 11px; text-align: center; cursor: pointer; transition: 0.3s; }
+        .nav-btn.active { color: var(--gold); }
+        .nav-btn i { font-size: 24px; display: block; margin-bottom: 5px; }
 
-        .battery-container { position: relative; width: 100px; height: 180px; border: 4px solid #333; margin: 30px auto; border-radius: 15px; padding: 5px; display: flex; align-items: flex-end; }
-        .battery-fill { width: 100%; border-radius: 8px; background: linear-gradient(to top, #008000, var(--neon)); box-shadow: 0 0 20px var(--neon); transition: height 1s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        
-        /* Robot Cards */
-        .robot-card { background: var(--card); border-radius: 20px; border: 1px solid #333; padding: 20px; margin-bottom: 20px; text-align: right; position: relative; overflow: hidden; }
-        .robot-card::before { content: ''; position: absolute; top: 0; left: 0; width: 5px; height: 100%; background: var(--gold); }
-        .robot-name { font-size: 20px; font-weight: bold; color: var(--gold); margin: 0; }
-        .robot-desc { font-size: 12px; color: #aaa; margin: 10px 0; line-height: 1.5; }
-        .robot-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .meta-box { background: rgba(0,0,0,0.3); padding: 8px; border-radius: 10px; font-size: 12px; border: 1px solid #222; }
-        .buy-btn { width: 100%; background: var(--gold); color: black; border: none; padding: 12px; border-radius: 12px; font-weight: bold; margin-top: 15px; cursor: pointer; }
+        /* بطاقات الروبوتات (ستايل احترافي) */
+        .robot-card { background: #0d0d0d; border-radius: 20px; border: 1px solid #1a1a1a; padding: 20px; margin-bottom: 15px; position: relative; }
+        .robot-card h3 { color: var(--gold); margin: 0; font-size: 20px; }
+        .robot-card p { font-size: 12px; color: #888; margin: 10px 0; line-height: 1.4; }
+        .robot-stats { display: flex; justify-content: space-between; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 12px; font-size: 12px; border: 1px solid #222; }
+        .buy-btn { width: 100%; background: var(--gold); color: black; border: none; padding: 14px; border-radius: 15px; font-weight: bold; margin-top: 15px; cursor: pointer; }
 
-        /* Leaderboard Table */
-        .rank-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        .rank-table tr { background: rgba(255,255,255,0.02); border-bottom: 1px solid #222; }
-        .rank-table td { padding: 15px 10px; font-size: 14px; }
-        .rank-num { font-weight: 900; color: var(--gold); width: 40px; }
-
-        /* Common Styles */
-        .section-title { color: var(--gold); text-align: center; border-bottom: 2px solid var(--gold); display: inline-block; padding-bottom: 5px; margin-bottom: 20px; width: 100%; }
-        details { background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 10px; cursor: pointer; border: 1px solid #222; }
-        summary { font-weight: bold; color: var(--gold); }
-        .social-link { display: flex; align-items: center; background: var(--card); padding: 18px; margin-bottom: 12px; border-radius: 15px; text-decoration: none; color: white; border: 1px solid #333; }
-        .social-link i { font-size: 24px; margin-left: 15px; width: 30px; text-align: center; }
+        /* لوحة المتصدرين */
+        .rank-item { display: flex; align-items: center; background: #0d0d0d; padding: 15px; border-radius: 15px; margin-bottom: 10px; border: 1px solid #1a1a1a; }
+        .rank-num { font-size: 20px; font-weight: 900; color: var(--gold); width: 40px; }
+        .rank-info { flex: 1; }
+        .rank-val { font-weight: bold; color: var(--neon); }
     </style>
 </head>
 <body>
 
-    <audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-37a.mp3"></audio>
+    <audio id="coinSound" src="https://www.soundjay.com/buttons/sounds/button-37a.mp3"></audio>
 
-    <div id="p-dash" class="page active">
-        <div class="header">
-            <div class="balance">$<span id="v-bal">0.00</span></div>
-            <div id="v-lvl" class="lvl-badge">LEVEL: ...</div>
+    <div id="p-home" class="page active">
+        <div class="top-balance">
+            <span id="txt-bal">BALANCE / יתרה</span>
+            <h1 id="v-bal">0.00</h1>
+            <div id="v-lvl" style="background: #111; border: 1px solid var(--gold); display: inline-block; padding: 3px 15px; border-radius: 20px; font-size: 11px; color: var(--gold); margin-top: 10px;">LEVEL: ...</div>
         </div>
 
-        <div class="battery-container">
-            <div id="v-fill" class="battery-fill" style="height: 0%"></div>
-        </div>
-        <div style="text-align: center; font-size: 24px; font-weight: bold;"><span id="v-perc">0</span>%</div>
-
-        <div class="stat-card">
-            <div class="stat-item"><span class="stat-val" id="v-prd">0</span><span class="stat-lbl">إنتاج/ساعة</span></div>
-            <div class="stat-item"><span class="stat-val" id="v-rob">0</span><span class="stat-lbl">روبوتات</span></div>
-            <div class="stat-item"><span class="stat-val" id="v-mx">0</span><span class="stat-lbl">السعة القصوى</span></div>
+        <div class="coin-container">
+            <div class="main-coin" onclick="collectAction()">
+                <i class="fas fa-bolt"></i>
+            </div>
         </div>
 
-        <button class="buy-btn" style="height: 60px; font-size: 20px;" onclick="collectAction()">جمع الطاقة المستخرجة ⚡</button>
+        <div style="display: flex; justify-content: space-around; background: #0d0d0d; padding: 15px; border-radius: 20px; border: 1px solid #1a1a1a;">
+            <div style="text-align: center;"><span id="v-prd" style="display:block; color:var(--neon); font-weight:bold;">0</span><small id="txt-prd">إنتاج/س</small></div>
+            <div style="text-align: center;"><span id="v-mx" style="display:block; color:var(--gold); font-weight:bold;">0</span><small id="txt-mx">السعة</small></div>
+        </div>
+        
+        <button class="buy-btn" style="margin-top: 25px; height: 60px; font-size: 18px;" onclick="collectAction()" id="txt-btn-coll">جمع الأرباح ⚡</button>
     </div>
 
-    <div id="p-robots" class="page">
-        <h2 class="section-title">متجر الروبوتات 🤖</h2>
+    <div id="p-shop" class="page">
+        <h2 id="txt-shop-title" style="text-align: center; color: var(--gold);">MARKET / שוק</h2>
         <div id="robots-list"></div>
     </div>
 
     <div id="p-lead" class="page">
-        <h2 class="section-title">لوحة المتصدرين 🏆</h2>
-        <div style="display: flex; gap: 5px; margin-bottom: 20px;">
-            <button class="buy-btn" style="margin:0; flex:1;" onclick="renderLead('global')">العالم</button>
-            <button class="buy-btn" style="margin:0; flex:1; background:#222; color:white;" onclick="renderLead('israel')">إسرائيل 🇮🇱</button>
-        </div>
-        <table class="rank-table"><tbody id="lead-body"></tbody></table>
+        <h2 id="txt-lead-title" style="text-align: center; color: var(--gold);">LEADERBOARD</h2>
+        <div id="lead-list"></div>
     </div>
 
-    <div id="p-info" class="page">
-        <h2 class="section-title">عن اللعبة ℹ️</h2>
-        <p style="font-size: 14px; line-height: 1.6; opacity: 0.8;">تعد EnergyVerse أول منصة ألعاب استثمارية تعتمد على تقنية الـ Web3، تأسست في 2025 لتمكين المستخدمين من تعدين الطاقة الرقمية وتحويلها لأرباح حقيقية. رؤيتنا هي خلق مجتمع مالي قوي ومرح.</p>
-        
-        <h2 class="section-title">الأسئلة الشائعة ❓</h2>
-        <details><summary>كيف يعمل التعدين؟</summary><p>بمجرد امتلاكك لروبوت، سيبدأ بإنتاج الطاقة تلقائياً كل ثانية حتى يمتلئ المخزن.</p></details>
-        <details><summary>هل أحتاج للبقاء متصلاً؟</summary><p>لا، الروبوتات تعمل في "السحابة" حتى وأنت نائم!</p></details>
-        <details><summary>كيف تعمل الإحالات؟</summary><p>ستحصل على 15$ فورية ومكافأة من إنتاج كل صديق تدعوه.</p></details>
-    </div>
-
-    <div id="p-social" class="page">
-        <h2 class="section-title">تواصل معنا 🌐</h2>
-        <a href="#" class="social-link"><i class="fab fa-telegram-plane" style="color: #0088cc;"></i> Telegram Channel</a>
-        <a href="#" class="social-link"><i class="fab fa-tiktok" style="color: #ff0050;"></i> TikTok Community</a>
-        <a href="#" class="social-link"><i class="fab fa-instagram" style="color: #e1306c;"></i> Instagram Official</a>
-        <a href="#" class="social-link"><i class="fab fa-x-twitter"></i> X / Twitter</a>
+    <div id="p-media" class="page">
+        <h2 style="text-align: center; color: var(--gold);">SOCIAL MEDIA</h2>
+        <div id="social-list"></div>
     </div>
 
     <div class="nav">
-        <div class="nav-btn active" onclick="nav('p-dash', this)"><i class="fas fa-home"></i>الرئيسية</div>
-        <div class="nav-btn" onclick="nav('p-robots', this)"><i class="fas fa-robot"></i>الروبوتات</div>
-        <div class="nav-btn" onclick="nav('p-lead', this)"><i class="fas fa-trophy"></i>المتصدرين</div>
-        <div class="nav-btn" onclick="nav('p-info', this)"><i class="fas fa-question-circle"></i>الأسئلة</div>
-        <div class="nav-btn" onclick="nav('p-social', this)"><i class="fas fa-share-alt"></i>روابطنا</div>
+        <div class="nav-btn active" onclick="nav('p-home', this)"><i class="fas fa-home"></i><span id="n1">الرئيسية</span></div>
+        <div class="nav-btn" onclick="nav('p-shop', this)"><i class="fas fa-robot"></i><span id="n2">الروبوتات</span></div>
+        <div class="nav-btn" onclick="nav('p-lead', this)"><i class="fas fa-trophy"></i><span id="n3">المتصدرين</span></div>
+        <div class="nav-btn" onclick="nav('p-media', this)"><i class="fas fa-share-alt"></i><span id="n4">ميديا</span></div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
-        tg.setHeaderColor('#050505');
+        tg.setHeaderColor('#000000');
 
         const params = new URLSearchParams(window.location.search);
         const lang = params.get('lang') || 'ar';
-        const balance = parseFloat(params.get('balance') || '0');
+        const bal = parseFloat(params.get('balance') || '0');
 
-        // نصوص اللغات
-        const langData = {
-            ar: { lv: ["مبتدئ برونزي", "خبير طاقة ⚡", "حوت التعدين 🐳", "ملك الطاقة العالمي 👑"] },
-            he: { lv: ["מתחיל ברונזה", "מומחה אנרגיה ⚡", "לווייתן כרייה 🐳", "מלך האנרגיה העולמי 👑"] }
+        const dict = {
+            ar: {
+                n1:"الرئيسية", n2:"المتجر", n3:"الأوائل", n4:"ميديا",
+                balL:"رصيدك الحالي", coll:"جمع الأرباح ⚡", prdL:"إنتاج/ساعة", mxL:"السعة",
+                shopT:"متجر الروبوتات", leadT:"لوحة المتصدرين", lv:["مبتدئ","خبير ⚡","حوت 🐳","ملك 👑"],
+                buy:"شراء الآن"
+            },
+            he: {
+                n1:"ראשי", n2:"חנות", n3:"מובילים", n4:"מדיה",
+                balL:"יתרה נוכחית", coll:"אסוף רווחים ⚡", prdL:"ייצור/שעה", mxL:"קיבולת",
+                shopT:"חנות רובוטים", leadT:"לוח המובילים", lv:["מתחיל","מומחה ⚡","לווייתן 🐳","מלך 👑"],
+                buy:"קנה עכשיו"
+            }
         };
 
-        // بيانات الروبوتات
+        const t = dict[lang];
+        if(lang==='he') document.body.classList.add('lang-he');
+
+        // تطبيق النصوص
+        document.getElementById('n1').innerText=t.n1; document.getElementById('n2').innerText=t.n2;
+        document.getElementById('n3').innerText=t.n3; document.getElementById('n4').innerText=t.n4;
+        document.getElementById('txt-bal').innerText=t.balL; document.getElementById('txt-btn-coll').innerText=t.coll;
+        document.getElementById('txt-prd').innerText=t.prdL; document.getElementById('txt-mx').innerText=t.mxL;
+        document.getElementById('txt-shop-title').innerText=t.shopT; document.getElementById('txt-lead-title').innerText=t.leadT;
+
+        // الليفل والرصيد
+        document.getElementById('v-bal').innerText=bal.toFixed(2);
+        let myL = t.lv[0]; if(bal>1000) myL=t.lv[1]; if(bal>5000) myL=t.lv[2]; if(bal>20000) myL=t.lv[3];
+        document.getElementById('v-lvl').innerText="LEVEL: " + myL;
+
+        // الملاحة
+        function nav(pId, el) {
+            document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+            document.getElementById(pId).classList.add('active');
+            el.classList.add('active');
+            document.getElementById('coinSound').play();
+            tg.HapticFeedback.impactOccurred('medium');
+        }
+
+        // الروبوتات
         const robots = [
-            { id: 1, n: {ar: "المنقب الحديدي", he: "כורה ברزل"}, p: 10, pr: 1, s: 10, d: "روبوتك الأول في الرحلة، مصمم للمبتدئين بكفاءة عالية واستهلاك منخفض." },
-            { id: 2, n: {ar: "كسارة الفولاذ", he: "מגרסת פלדה"}, p: 50, pr: 5, s: 60, d: "قوة مضاعفة وسعة تخزين أكبر، الخيار الأمثل للمرحلة المتوسطة." },
-            { id: 3, n: {ar: "مثقاب التيتانيوم", he: "מקדח טיטניום"}, p: 200, pr: 25, s: 300, d: "يستخدم تقنية الثقب العميقة لاستخراج الطاقة النادرة." },
-            { id: 4, n: {ar: "رابط الطاقة", he: "קישור כוח"}, p: 1000, pr: 150, s: 2000, d: "روبوت صناعي ضخم يربط محطات الطاقة ببعضها لإنتاج هائل." },
-            { id: 5, n: {ar: "المحرك الكمي", he: "מנוע קוונטי"}, p: 5000, pr: 850, s: 12000, d: "أقوى ما توصلت إليه تكنولوجيا EnergyVerse، يعمل بمحرك كمي خارق." }
+            {id:1, n:{ar:"المنقب الحديدي", he:"כורה ברזל"}, p:10, pr:1, s:10},
+            {id:2, n:{ar:"كسارة الفولاذ", he:"מגרסת פלדה"}, p:50, pr:5, s:60},
+            {id:3, n:{ar:"مثقاب التيتانيوم", he:"מקדח טיטניום"}, p:200, pr:25, s:300}
         ];
-
-        // تطبيق الرصيد والليفل
-        document.getElementById('v-bal').innerText = balance.toFixed(2);
-        let currentLv = langData[lang].lv[0];
-        if(balance > 1000) currentLv = langData[lang].lv[1];
-        if(balance > 5000) currentLv = langData[lang].lv[2];
-        if(balance > 20000) currentLv = langData[lang].lv[3];
-        document.getElementById('v-lvl').innerText = "LEVEL: " + currentLv;
-
-        // بناء قائمة الروبوتات
-        const robotList = document.getElementById('robots-list');
-        robots.forEach(r => {
-            robotList.innerHTML += `
+        const rList = document.getElementById('robots-list');
+        robots.forEach(r=>{
+            rList.innerHTML += `
                 <div class="robot-card">
-                    <p class="robot-name">${r.n[lang]}</p>
-                    <p class="robot-desc">${r.d}</p>
-                    <div class="robot-meta">
-                        <div class="meta-box">السعر: ${r.p}$</div>
-                        <div class="meta-box">إنتاج: ${r.pr}/س</div>
-                        <div class="meta-box">سعة: ${r.s}</div>
-                        <div class="meta-box">كفاءة: عالية</div>
+                    <h3>${r.n[lang]}</h3>
+                    <div class="robot-stats">
+                        <span>Price: ${r.p}$</span>
+                        <span>Prod: ${r.pr}/h</span>
+                        <span>Max: ${r.s}</span>
                     </div>
-                    <button class="buy-btn" onclick="buyRobot(${r.id})">شراء الآن 💰</button>
+                    <button class="buy-btn" onclick="buyR(${r.id})">${t.buy}</button>
                 </div>`;
         });
 
-        // الملاحة
-        function nav(pId, btn) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(pId).classList.add('active');
-            btn.classList.add('active');
-            document.getElementById('clickSound').play();
-        }
-
-        // محاكاة الطاقة
-        let p = 40;
-        setInterval(() => { if(p < 100) { p += 0.1; document.getElementById('v-fill').style.height = p + '%'; document.getElementById('v-perc').innerText = Math.floor(p); } }, 2000);
-
         function collectAction() {
             tg.HapticFeedback.notificationOccurred('success');
-            tg.showAlert(lang === 'ar' ? "تم إرسال طلب الجمع للبوت! ⚡" : "בקשת האיסוף נשלחה לבוט! ⚡");
-        }
-
-        function buyRobot(id) {
-            tg.showConfirm(lang === 'ar' ? "هل أنت متأكد من رغبتك في شراء هذا الروبوت؟" : "האם אתה בטוח שברצונך לקנות את הרובוט הזה?");
-        }
-
-        function renderLead(type) {
-            const body = document.getElementById('lead-body');
-            body.innerHTML = "";
-            for(let i=1; i<=10; i++) {
-                body.innerHTML += `<tr><td class="rank-num">#${i}</td><td>User_${i}</td><td style="color:var(--gold)">$${(10000/i).toFixed(0)}</td></tr>`;
-            }
-        }
-        renderLead('global');
-
-        if(lang === 'he') document.body.style.direction = 'ltr';
-    </script>
-</body>
-</html>
