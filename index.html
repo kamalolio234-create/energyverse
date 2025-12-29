@@ -5,14 +5,22 @@
   <title>EnergyVerse</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body style="background:#0b0b0b;color:white;text-align:center;font-family:sans-serif;">
+<body>
 
-  <h1>⚡ EnergyVerse</h1>
-  <p>الموقع شغّال ومربوط مع GitHub Pages ✅</p>
+  <div class="container">
+    <h1>⚡ EnergyVerse</h1>
+    <p class="welcome">الموقع شغّال ومربوط مع GitHub Pages ✅</p>
 
-  <button id="collectBtn">جمع الطاقة ⚡</button>
-  <p id="balanceDisplay">رصيدك: 0 IM</p>
+    <div class="energy-section">
+      <button id="collectBtn">جمع الطاقة ⚡</button>
+      <p id="balanceDisplay">رصيدك: 0 IM</p>
+      <div class="battery">
+        <div class="battery-fill" id="batteryFill"></div>
+      </div>
+    </div>
 
-  <script src="app.js"></script> <!-- رابط ملف JS -->
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>
