@@ -1,54 +1,53 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <title>EnergyVerse</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>EnergyVerse Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/dist/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div id="app">
+        <header class="header">
+            <h2 id="txt-dash">Dashboard / דאשבורד</h2>
+            <div class="balance-container">
+                <span id="v-bal">0.00</span> <small>IM</small>
+            </div>
+            <div class="lvl-badge" id="v-lvl">LEVEL: PRO</div>
+        </header>
 
-  <div class="container">
-    <h1>⚡ EnergyVerse</h1>
-    <p class="welcome">الموقع شغّال ومربوط مع GitHub Pages ✅</p>
+        <main class="main-content">
+            <div class="energy-circle" id="collectBtn">
+                <i class="fas fa-bolt"></i>
+                <div class="glow-ring"></div>
+            </div>
 
-    <div class="energy-section">
-      <button id="collectBtn">جمع الطاقة ⚡</button>
-      <p id="balanceDisplay">رصيدك: 0 IM</p>
-      <div class="battery">
-        <div class="battery-fill" id="batteryFill"></div>
-      </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span id="txt-s1">Production / ייצור</span>
+                    <b id="v-prd">0.00</b>
+                </div>
+                <div class="stat-card">
+                    <span id="txt-s2">Storage / אחסון</span>
+                    <b id="v-mx">100</b>
+                </div>
+            </div>
+        </main>
+
+        <section class="shop-section">
+            <h3 class="section-title">Market / שוק</h3>
+            <div id="robots-list">
+                </div>
+        </section>
+
+        <nav class="bottom-nav">
+            <div class="nav-item active"><i class="fas fa-home"></i><span>الرئيسية</span></div>
+            <div class="nav-item"><i class="fas fa-robot"></i><span>الروبوتات</span></div>
+            <div class="nav-item"><i class="fas fa-trophy"></i><span>الأوائل</span></div>
+            <div class="nav-item"><i class="fas fa-user-friends"></i><span>أصدقاء</span></div>
+        </nav>
     </div>
-
-    <!-- قسم المتجر -->
-    <div class="robots-section">
-      <h2>🤖 المتجر</h2>
-      <div class="robots-grid">
-        <div class="robot" id="robot1">
-          <p class="robot-name">المنقب الحديدي</p>
-          <p>💰 السعر: 10 IM</p>
-          <p>⚡ إنتاج: 1/h</p>
-          <p>📦 تخزين: 10</p>
-          <button class="buyBtn" data-price="10">شراء</button>
-        </div>
-        <div class="robot" id="robot2">
-          <p class="robot-name">كسارة الفولاذ</p>
-          <p>💰 السعر: 50 IM</p>
-          <p>⚡ إنتاج: 5/h</p>
-          <p>📦 تخزين: 60</p>
-          <button class="buyBtn" data-price="50">شراء</button>
-        </div>
-        <div class="robot" id="robot3">
-          <p class="robot-name">مثقاب التيتانيوم</p>
-          <p>💰 السعر: 200 IM</p>
-          <p>⚡ إنتاج: 25/h</p>
-          <p>📦 تخزين: 300</p>
-          <button class="buyBtn" data-price="200">شراء</button>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <script src="app.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
