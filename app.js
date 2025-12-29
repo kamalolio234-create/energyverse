@@ -50,22 +50,27 @@ const robotsData = [
     }
 ];
 
-// عرض الروبوتات
-const list = document.getElementById('robots-list');
-robotsData.forEach(r => {
-    list.innerHTML += `
-        <div class="robot-card">
-            <img src="${r.img}" class="robot-img">
-            <div class="robot-title">${lang === 'ar' ? r.name.ar : r.name.he}</div>
-            <div class="robot-story">${lang === 'ar' ? r.story.ar : r.story.he}</div>
-            <div class="robot-stats">
-                <span>Prod: ${r.prod}/h</span>
-                <span style="color:var(--gold)">Price: ${r.price} IM</span>
-            </div>
-            <button onclick="tg.HapticFeedback.impactOccurred('heavy')" style="width:100%; background:var(--gold); border:none; padding:15px; border-radius:10px; font-weight:bold; margin-top:15px;">BUY / קנה</button>
-        </div>
-    `;
-});
+// هذه الدالة تضمن أن الروبوتات تظهر فور تحميل الصفحة
+window.onload = function() {
+    const list = document.getElementById('robots-list');
+    if (list) {
+        list.innerHTML = ""; // تنظيف القائمة قبل العرض
+        robotsData.forEach(r => {
+            list.innerHTML += `
+                <div class="robot-card">
+                    <img src="${r.img}" class="robot-img" onerror="this.src='https://via.placeholder.com/300x200?text=Robot+Image'">
+                    <div class="robot-title">${lang === 'ar' ? r.name.ar : r.name.he}</div>
+                    <div class="robot-story">${lang === 'ar' ? r.story.ar : r.story.he}</div>
+                    <div class="robot-stats">
+                        <span>Prod: ${r.prod}/h</span>
+                        <span style="color:var(--gold)">Price: ${r.price} IM</span>
+                    </div>
+                    <button onclick="window.Telegram.WebApp.HapticFeedback.impactOccurred('heavy')" style="width:100%; background:var(--gold); border:none; padding:15px; border-radius:10px; font-weight:bold; margin-top:15px; cursor:pointer;">BUY / קנה</button>
+                </div>
+            `;
+        });
+    }
+};
 
 function showPage(id, el) {
     document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
