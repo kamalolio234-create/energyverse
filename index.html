@@ -3,164 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>EnergyVerse Pro - MultiLang</title>
+    <title>EnergyVerse Pro - Web3 Game</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/dist/css/all.min.css">
     <style>
-        :root { --gold: #FFD700; --dark-bg: #0a0a0a; --neon-green: #39FF14; --glass: rgba(255, 255, 255, 0.05); }
-        body { background-color: var(--dark-bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; overflow: hidden; height: 100vh; direction: rtl; }
-        .nav-bar { position: fixed; bottom: 0; width: 100%; background: #111; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid var(--gold); z-index: 100; }
-        .nav-item { color: #888; text-align: center; font-size: 12px; cursor: pointer; flex: 1; }
-        .nav-item.active { color: var(--gold); }
-        .nav-item i { font-size: 20px; display: block; margin-bottom: 5px; }
-        .page { display: none; padding: 20px; height: 82vh; overflow-y: auto; text-align: center; }
+        :root { --gold: #FFD700; --neon: #39FF14; --dark: #050505; --card: rgba(255, 255, 255, 0.05); }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--dark); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; overflow: hidden; direction: rtl; }
+        
+        /* Navigation */
+        .nav { position: fixed; bottom: 0; width: 100%; background: rgba(10,10,10,0.95); display: flex; border-top: 1px solid #222; padding: 10px 0; z-index: 1000; backdrop-filter: blur(10px); }
+        .nav-btn { flex: 1; color: #666; font-size: 10px; text-align: center; cursor: pointer; transition: 0.3s; }
+        .nav-btn.active { color: var(--gold); transform: translateY(-3px); }
+        .nav-btn i { font-size: 22px; display: block; margin-bottom: 4px; }
+
+        /* Pages System */
+        .page { display: none; padding: 20px; height: 90vh; overflow-y: auto; padding-bottom: 100px; animation: fadeIn 0.4s ease; }
         .page.active { display: block; }
-        .level-badge { background: linear-gradient(45deg, #444, #111); border: 1px solid var(--gold); padding: 5px 15px; border-radius: 20px; font-size: 14px; color: var(--gold); display: inline-block; margin-top: 10px; }
-        .leaderboard-table { width: 100%; border-collapse: collapse; margin-top: 15px; background: var(--glass); border-radius: 10px; }
-        .leaderboard-table th { background: var(--gold); color: black; padding: 10px; }
-        .leaderboard-table td { padding: 10px; border-bottom: 1px solid #222; }
-        .gold-btn { background: var(--gold); border: none; padding: 15px; border-radius: 30px; font-weight: bold; width: 80%; margin-top: 20px; cursor: pointer; font-size: 18px; }
-        .social-link { display: flex; align-items: center; background: var(--glass); padding: 15px; margin: 10px 0; border-radius: 10px; text-decoration: none; color: white; border: 1px solid #333; }
-        .social-link i { font-size: 24px; margin-left: 15px; }
-        .lang-he { direction: ltr !important; text-align: left !important; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Header & Dashboard */
+        .header { text-align: center; margin-bottom: 25px; background: linear-gradient(180deg, rgba(255,215,0,0.05) 0%, transparent 100%); padding: 20px; border-radius: 0 0 30px 30px; }
+        .balance { font-size: 42px; font-weight: 900; color: var(--gold); text-shadow: 0 0 20px rgba(255,215,0,0.3); }
+        .lvl-badge { background: #1a1a1a; border: 1px solid var(--gold); padding: 4px 15px; border-radius: 50px; font-size: 12px; color: var(--gold); letter-spacing: 1px; }
+        
+        /* Battery & Stats */
+        .stat-card { background: var(--card); padding: 15px; border-radius: 15px; border: 1px solid #222; display: flex; justify-content: space-around; margin: 15px 0; }
+        .stat-item { text-align: center; }
+        .stat-val { display: block; font-weight: bold; color: var(--gold); font-size: 18px; }
+        .stat-lbl { font-size: 11px; opacity: 0.6; }
+
+        .battery-container { position: relative; width: 100px; height: 180px; border: 4px solid #333; margin: 30px auto; border-radius: 15px; padding: 5px; display: flex; align-items: flex-end; }
+        .battery-fill { width: 100%; border-radius: 8px; background: linear-gradient(to top, #008000, var(--neon)); box-shadow: 0 0 20px var(--neon); transition: height 1s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        
+        /* Robot Cards */
+        .robot-card { background: var(--card); border-radius: 20px; border: 1px solid #333; padding: 20px; margin-bottom: 20px; text-align: right; position: relative; overflow: hidden; }
+        .robot-card::before { content: ''; position: absolute; top: 0; left: 0; width: 5px; height: 100%; background: var(--gold); }
+        .robot-name { font-size: 20px; font-weight: bold; color: var(--gold); margin: 0; }
+        .robot-desc { font-size: 12px; color: #aaa; margin: 10px 0; line-height: 1.5; }
+        .robot-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .meta-box { background: rgba(0,0,0,0.3); padding: 8px; border-radius: 10px; font-size: 12px; border: 1px solid #222; }
+        .buy-btn { width: 100%; background: var(--gold); color: black; border: none; padding: 12px; border-radius: 12px; font-weight: bold; margin-top: 15px; cursor: pointer; }
+
+        /* Leaderboard Table */
+        .rank-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .rank-table tr { background: rgba(255,255,255,0.02); border-bottom: 1px solid #222; }
+        .rank-table td { padding: 15px 10px; font-size: 14px; }
+        .rank-num { font-weight: 900; color: var(--gold); width: 40px; }
+
+        /* Common Styles */
+        .section-title { color: var(--gold); text-align: center; border-bottom: 2px solid var(--gold); display: inline-block; padding-bottom: 5px; margin-bottom: 20px; width: 100%; }
+        details { background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 10px; cursor: pointer; border: 1px solid #222; }
+        summary { font-weight: bold; color: var(--gold); }
+        .social-link { display: flex; align-items: center; background: var(--card); padding: 18px; margin-bottom: 12px; border-radius: 15px; text-decoration: none; color: white; border: 1px solid #333; }
+        .social-link i { font-size: 24px; margin-left: 15px; width: 30px; text-align: center; }
     </style>
 </head>
 <body>
 
-    <audio id="goldSound" src="https://www.soundjay.com/buttons/sounds/button-37a.mp3"></audio>
+    <audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-37a.mp3"></audio>
 
-    <div id="home" class="page active">
-        <div style="font-size: 35px; color: var(--gold); font-weight: bold;">$<span id="balance">0.00</span></div>
-        <div id="user-level" class="level-badge">Level: ...</div>
-        <div style="margin-top: 40px;">
-            <div style="height: 160px; width: 85px; border: 4px solid #333; margin: auto; position: relative; border-radius: 15px; display: flex; align-items: flex-end; padding: 4px; background: #000;">
-                <div id="energy-fill" style="width: 100%; height: 30%; background: var(--neon-green); border-radius: 8px; box-shadow: 0 0 15px var(--neon-green); transition: 1s;"></div>
-            </div>
-            <p style="font-size: 20px; margin-top: 10px;"><span id="energy-perc">30</span>%</p>
+    <div id="p-dash" class="page active">
+        <div class="header">
+            <div class="balance">$<span id="v-bal">0.00</span></div>
+            <div id="v-lvl" class="lvl-badge">LEVEL: ...</div>
         </div>
-        <button id="collect-btn" class="gold-btn" onclick="collectGold()">جمع الأرباح 🪙</button>
-    </div>
 
-    <div id="leaderboard" class="page">
-        <h2 id="lead-title" style="color: var(--gold);">لوحة المتصدرين 🏆</h2>
-        <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 15px;">
-            <button onclick="showTab('global')" id="tab-global" style="background:none; border:1px solid var(--gold); color:white; padding:8px; border-radius:8px;">العالم</button>
-            <button onclick="showTab('israel')" id="tab-israel" style="background:none; border:1px solid var(--gold); color:white; padding:8px; border-radius:8px;">إسرائيل 🇮🇱</button>
-            <button onclick="showTab('saudi')" id="tab-saudi" style="background:none; border:1px solid var(--gold); color:white; padding:8px; border-radius:8px;">السعودية 🇸🇦</button>
+        <div class="battery-container">
+            <div id="v-fill" class="battery-fill" style="height: 0%"></div>
         </div>
-        <table class="leaderboard-table">
-            <thead><tr><th id="th-rank">المركز</th><th id="th-name">الاسم</th><th id="th-bal">الرصيد</th></tr></thead>
-            <tbody id="leader-body"></tbody>
-        </table>
+        <div style="text-align: center; font-size: 24px; font-weight: bold;"><span id="v-perc">0</span>%</div>
+
+        <div class="stat-card">
+            <div class="stat-item"><span class="stat-val" id="v-prd">0</span><span class="stat-lbl">إنتاج/ساعة</span></div>
+            <div class="stat-item"><span class="stat-val" id="v-rob">0</span><span class="stat-lbl">روبوتات</span></div>
+            <div class="stat-item"><span class="stat-val" id="v-mx">0</span><span class="stat-lbl">السعة القصوى</span></div>
+        </div>
+
+        <button class="buy-btn" style="height: 60px; font-size: 20px;" onclick="collectAction()">جمع الطاقة المستخرجة ⚡</button>
     </div>
 
-    <div id="info" class="page">
-        <h2 id="about-title" style="color: var(--gold);">من نحن؟</h2>
-        <p id="about-text">نحن نساعدك في بناء ثروة رقمية من خلال تكنولوجيا تعدين الطاقة المتقدمة.</p>
-        <hr border="0" style="border-top: 1px solid #333; margin: 20px 0;">
-        <h2 id="faq-title" style="color: var(--gold);">الأسئلة الشائعة</h2>
-        <details style="background: var(--glass); padding: 15px; border-radius: 10px; margin-bottom: 10px; text-align: right;">
-            <summary id="q1">كيف يتم السحب؟</summary>
-            <p id="a1" style="padding-top:10px; color: #ccc;">عبر قسم السحب في البوت عند الوصول للحد الأدنى.</p>
-        </details>
+    <div id="p-robots" class="page">
+        <h2 class="section-title">متجر الروبوتات 🤖</h2>
+        <div id="robots-list"></div>
     </div>
 
-    <div id="social" class="page">
-        <h2 id="social-title" style="color: var(--gold);">تابعنا 📱</h2>
-        <a href="#" class="social-link"><i class="fab fa-tiktok"></i> TikTok</a>
-        <a href="#" class="social-link"><i class="fab fa-instagram"></i> Instagram</a>
-        <a href="#" class="social-link"><i class="fab fa-telegram"></i> Channel</a>
+    <div id="p-lead" class="page">
+        <h2 class="section-title">لوحة المتصدرين 🏆</h2>
+        <div style="display: flex; gap: 5px; margin-bottom: 20px;">
+            <button class="buy-btn" style="margin:0; flex:1;" onclick="renderLead('global')">العالم</button>
+            <button class="buy-btn" style="margin:0; flex:1; background:#222; color:white;" onclick="renderLead('israel')">إسرائيل 🇮🇱</button>
+        </div>
+        <table class="rank-table"><tbody id="lead-body"></tbody></table>
     </div>
 
-    <div class="nav-bar">
-        <div class="nav-item active" onclick="nav('home')"><i class="fas fa-bolt"></i><span id="nav-1">الطاقة</span></div>
-        <div class="nav-item" onclick="nav('leaderboard')"><i class="fas fa-trophy"></i><span id="nav-2">المتصدرين</span></div>
-        <div class="nav-item" onclick="nav('info')"><i class="fas fa-info-circle"></i><span id="nav-3">الشرح</span></div>
-        <div class="nav-item" onclick="nav('social')"><i class="fas fa-share-nodes"></i><span id="nav-4">التواصل</span></div>
+    <div id="p-info" class="page">
+        <h2 class="section-title">عن اللعبة ℹ️</h2>
+        <p style="font-size: 14px; line-height: 1.6; opacity: 0.8;">تعد EnergyVerse أول منصة ألعاب استثمارية تعتمد على تقنية الـ Web3، تأسست في 2025 لتمكين المستخدمين من تعدين الطاقة الرقمية وتحويلها لأرباح حقيقية. رؤيتنا هي خلق مجتمع مالي قوي ومرح.</p>
+        
+        <h2 class="section-title">الأسئلة الشائعة ❓</h2>
+        <details><summary>كيف يعمل التعدين؟</summary><p>بمجرد امتلاكك لروبوت، سيبدأ بإنتاج الطاقة تلقائياً كل ثانية حتى يمتلئ المخزن.</p></details>
+        <details><summary>هل أحتاج للبقاء متصلاً؟</summary><p>لا، الروبوتات تعمل في "السحابة" حتى وأنت نائم!</p></details>
+        <details><summary>كيف تعمل الإحالات؟</summary><p>ستحصل على 15$ فورية ومكافأة من إنتاج كل صديق تدعوه.</p></details>
+    </div>
+
+    <div id="p-social" class="page">
+        <h2 class="section-title">تواصل معنا 🌐</h2>
+        <a href="#" class="social-link"><i class="fab fa-telegram-plane" style="color: #0088cc;"></i> Telegram Channel</a>
+        <a href="#" class="social-link"><i class="fab fa-tiktok" style="color: #ff0050;"></i> TikTok Community</a>
+        <a href="#" class="social-link"><i class="fab fa-instagram" style="color: #e1306c;"></i> Instagram Official</a>
+        <a href="#" class="social-link"><i class="fab fa-x-twitter"></i> X / Twitter</a>
+    </div>
+
+    <div class="nav">
+        <div class="nav-btn active" onclick="nav('p-dash', this)"><i class="fas fa-home"></i>الرئيسية</div>
+        <div class="nav-btn" onclick="nav('p-robots', this)"><i class="fas fa-robot"></i>الروبوتات</div>
+        <div class="nav-btn" onclick="nav('p-lead', this)"><i class="fas fa-trophy"></i>المتصدرين</div>
+        <div class="nav-btn" onclick="nav('p-info', this)"><i class="fas fa-question-circle"></i>الأسئلة</div>
+        <div class="nav-btn" onclick="nav('p-social', this)"><i class="fas fa-share-alt"></i>روابطنا</div>
     </div>
 
     <script>
-        const webapp = window.Telegram.WebApp;
-        webapp.expand();
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.setHeaderColor('#050505');
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const lang = urlParams.get('lang') || 'ar';
-        const bal = parseFloat(urlParams.get('balance') || '0');
+        const params = new URLSearchParams(window.location.search);
+        const lang = params.get('lang') || 'ar';
+        const balance = parseFloat(params.get('balance') || '0');
 
-        // نصوص اللغتين
-        const texts = {
-            ar: {
-                nav1: "الطاقة", nav2: "المتصدرين", nav3: "الشرح", nav4: "التواصل",
-                collect: "جمع الأرباح 🪙", leadT: "لوحة المتصدرين 🏆", global: "العالم", israel: "إسرائيل 🇮🇱", saudi: "السعودية 🇸🇦",
-                rank: "المركز", name: "الاسم", balance: "الرصيد", aboutT: "من نحن؟", aboutTxt: "نحن نساعدك في بناء ثروة رقمية من خلال تكنولوجيا تعدين الطاقة المتقدمة.",
-                faqT: "الأسئلة الشائعة", q1: "كيف يتم السحب؟", a1: "عبر قسم السحب في البوت.", socialT: "تابعنا 📱",
-                lv1: "المبتدئ البرونزي", lv2: "خبير الطاقة الذهبي ⚡", lv3: "حوت الاستثمار 🐳", lv4: "الملك العالمي 👑"
-            },
-            he: {
-                nav1: "אנרגיה", nav2: "מובילים", nav3: "מידע", nav4: "מדיה",
-                collect: "אסוף רווחים 🪙", leadT: "לוח המובילים 🏆", global: "עולם", israel: "ישראל 🇮🇱", saudi: "ערב הסעודית 🇸🇦",
-                rank: "דירוג", name: "שם", balance: "יתרה", aboutT: "מי אנחנו?", aboutTxt: "אנחנו עוזרים לך לבנות עושר דיגיטלי באמצעות טכנולוגיית כריית אנרגיה מתקדמת.",
-                faqT: "שאלות נפוצות", q1: "איך מושכים כסף?", a1: "דרך כפתור המשיכה בבוט.", socialT: "עקבו אחרינו 📱",
-                lv1: "מתחיל ברונזה", lv2: "מומחה אנרגיה זהב ⚡", lv3: "לווייתן השקעות 🐳", lv4: "המלך העולמי 👑"
-            }
+        // نصوص اللغات
+        const langData = {
+            ar: { lv: ["مبتدئ برونزي", "خبير طاقة ⚡", "حوت التعدين 🐳", "ملك الطاقة العالمي 👑"] },
+            he: { lv: ["מתחיל ברונזה", "מומחה אנרגיה ⚡", "לווייתן כרייה 🐳", "מלך האנרגיה העולמי 👑"] }
         };
 
-        const t = texts[lang];
+        // بيانات الروبوتات
+        const robots = [
+            { id: 1, n: {ar: "المنقب الحديدي", he: "כורה ברزل"}, p: 10, pr: 1, s: 10, d: "روبوتك الأول في الرحلة، مصمم للمبتدئين بكفاءة عالية واستهلاك منخفض." },
+            { id: 2, n: {ar: "كسارة الفولاذ", he: "מגרסת פלדה"}, p: 50, pr: 5, s: 60, d: "قوة مضاعفة وسعة تخزين أكبر، الخيار الأمثل للمرحلة المتوسطة." },
+            { id: 3, n: {ar: "مثقاب التيتانيوم", he: "מקדח טיטניום"}, p: 200, pr: 25, s: 300, d: "يستخدم تقنية الثقب العميقة لاستخراج الطاقة النادرة." },
+            { id: 4, n: {ar: "رابط الطاقة", he: "קישור כוח"}, p: 1000, pr: 150, s: 2000, d: "روبوت صناعي ضخم يربط محطات الطاقة ببعضها لإنتاج هائل." },
+            { id: 5, n: {ar: "المحرك الكمي", he: "מנוע קוונטי"}, p: 5000, pr: 850, s: 12000, d: "أقوى ما توصلت إليه تكنولوجيا EnergyVerse، يعمل بمحرك كمي خارق." }
+        ];
 
-        // تطبيق النصوص واللغة
-        if(lang === 'he') {
-            document.body.classList.add('lang-he');
-            document.body.style.direction = 'ltr';
-        }
+        // تطبيق الرصيد والليفل
+        document.getElementById('v-bal').innerText = balance.toFixed(2);
+        let currentLv = langData[lang].lv[0];
+        if(balance > 1000) currentLv = langData[lang].lv[1];
+        if(balance > 5000) currentLv = langData[lang].lv[2];
+        if(balance > 20000) currentLv = langData[lang].lv[3];
+        document.getElementById('v-lvl').innerText = "LEVEL: " + currentLv;
 
-        document.getElementById('nav-1').innerText = t.nav1;
-        document.getElementById('nav-2').innerText = t.nav2;
-        document.getElementById('nav-3').innerText = t.nav3;
-        document.getElementById('nav-4').innerText = t.nav4;
-        document.getElementById('collect-btn').innerText = t.collect;
-        document.getElementById('lead-title').innerText = t.leadT;
-        document.getElementById('tab-global').innerText = t.global;
-        document.getElementById('tab-israel').innerText = t.israel;
-        document.getElementById('tab-saudi').innerText = t.saudi;
-        document.getElementById('th-rank').innerText = t.rank;
-        document.getElementById('th-name').innerText = t.name;
-        document.getElementById('th-bal').innerText = t.balance;
-        document.getElementById('about-title').innerText = t.aboutT;
-        document.getElementById('about-text').innerText = t.aboutTxt;
-        document.getElementById('faq-title').innerText = t.faqT;
-        document.getElementById('social-title').innerText = t.socialT;
-        document.getElementById('q1').innerText = t.q1;
-        document.getElementById('a1').innerText = t.a1;
+        // بناء قائمة الروبوتات
+        const robotList = document.getElementById('robots-list');
+        robots.forEach(r => {
+            robotList.innerHTML += `
+                <div class="robot-card">
+                    <p class="robot-name">${r.n[lang]}</p>
+                    <p class="robot-desc">${r.d}</p>
+                    <div class="robot-meta">
+                        <div class="meta-box">السعر: ${r.p}$</div>
+                        <div class="meta-box">إنتاج: ${r.pr}/س</div>
+                        <div class="meta-box">سعة: ${r.s}</div>
+                        <div class="meta-box">كفاءة: عالية</div>
+                    </div>
+                    <button class="buy-btn" onclick="buyRobot(${r.id})">شراء الآن 💰</button>
+                </div>`;
+        });
 
-        // الرصيد والليفل
-        document.getElementById('balance').innerText = bal.toFixed(2);
-        let level = t.lv1;
-        if(bal > 1000) level = t.lv2;
-        if(bal > 5000) level = t.lv3;
-        if(bal > 20000) level = t.lv4;
-        document.getElementById('user-level').innerText = "Level: " + level;
-
-        function nav(pageId) {
+        // الملاحة
+        function nav(pId, btn) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-            event.currentTarget.classList.add('active');
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(pId).classList.add('active');
+            btn.classList.add('active');
+            document.getElementById('clickSound').play();
         }
 
-        function collectGold() {
-            document.getElementById('goldSound').play();
-            webapp.HapticFeedback.impactOccurred('heavy');
-            webapp.showAlert(lang === 'ar' ? "تم جمع الذهب!" : "זהב נאסף!");
+        // محاكاة الطاقة
+        let p = 40;
+        setInterval(() => { if(p < 100) { p += 0.1; document.getElementById('v-fill').style.height = p + '%'; document.getElementById('v-perc').innerText = Math.floor(p); } }, 2000);
+
+        function collectAction() {
+            tg.HapticFeedback.notificationOccurred('success');
+            tg.showAlert(lang === 'ar' ? "تم إرسال طلب الجمع للبوت! ⚡" : "בקשת האיסוף נשלחה לבוט! ⚡");
         }
 
-        function showTab(region) {
-            const body = document.getElementById('leader-body');
+        function buyRobot(id) {
+            tg.showConfirm(lang === 'ar' ? "هل أنت متأكد من رغبتك في شراء هذا الروبوت؟" : "האם אתה בטוח שברצונך לקנות את הרובוט הזה?");
+        }
+
+        function renderLead(type) {
+            const body = document.getElementById('lead-body');
             body.innerHTML = "";
             for(let i=1; i<=10; i++) {
-                body.innerHTML += `<tr><td>${i}</td><td>User_${i}</td><td>$${(20000/i).toFixed(0)}</td></tr>`;
+                body.innerHTML += `<tr><td class="rank-num">#${i}</td><td>User_${i}</td><td style="color:var(--gold)">$${(10000/i).toFixed(0)}</td></tr>`;
             }
         }
-        showTab('global');
+        renderLead('global');
+
+        if(lang === 'he') document.body.style.direction = 'ltr';
     </script>
 </body>
 </html>
