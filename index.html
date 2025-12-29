@@ -8,46 +8,56 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="app">
-        <header class="header">
-            <h2 id="txt-dash">Dashboard / דאשבורד</h2>
-            <div class="balance-container">
-                <span id="v-bal">0.00</span> <small>IM</small>
-            </div>
-            <div class="lvl-badge" id="v-lvl">LEVEL: PRO</div>
-        </header>
 
-        <main class="main-content">
-            <div class="energy-circle" id="collectBtn">
+    <div id="home" class="page active">
+        <div class="header">
+            <span class="balance-label">BALANCE / יתרה</span>
+            <div class="balance-amount" id="main-bal">0.00</div>
+            <div style="color:var(--gold); font-size:12px; border:1px solid var(--gold); display:inline-block; padding:2px 12px; border-radius:15px;">LEVEL: PRO</div>
+        </div>
+
+        <div class="energy-container">
+            <div class="main-circle" id="tap-target">
+                <div class="circle-glow"></div>
                 <i class="fas fa-bolt"></i>
-                <div class="glow-ring"></div>
             </div>
+        </div>
 
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <span id="txt-s1">Production / ייצור</span>
-                    <b id="v-prd">0.00</b>
-                </div>
-                <div class="stat-card">
-                    <span id="txt-s2">Storage / אחסון</span>
-                    <b id="v-mx">100</b>
-                </div>
-            </div>
-        </main>
-
-        <section class="shop-section">
-            <h3 class="section-title">Market / שוק</h3>
-            <div id="robots-list">
-                </div>
-        </section>
-
-        <nav class="bottom-nav">
-            <div class="nav-item active"><i class="fas fa-home"></i><span>الرئيسية</span></div>
-            <div class="nav-item"><i class="fas fa-robot"></i><span>الروبوتات</span></div>
-            <div class="nav-item"><i class="fas fa-trophy"></i><span>الأوائل</span></div>
-            <div class="nav-item"><i class="fas fa-user-friends"></i><span>أصدقاء</span></div>
-        </nav>
+        <div class="stats-grid">
+            <div class="stat-card"><span>Production / ייצור</span><b id="prod-val">0.00</b></div>
+            <div class="stat-card"><span>Storage / אחסון</span><b id="max-val">100</b></div>
+        </div>
+        
+        <button id="collect-btn" style="width:90%; margin:30px 5%; background:var(--gold); border:none; padding:18px; border-radius:15px; font-weight:bold; font-size:18px;">جمع الأرباح ⚡</button>
     </div>
+
+    <div id="robots" class="page">
+        <h2 style="color:var(--gold); border-right:4px solid var(--gold); padding-right:10px;">متجر الروبوتات 🤖</h2>
+        <div id="robots-list-hd">
+            </div>
+    </div>
+
+    <div id="leader" class="page">
+        <h2 style="color:var(--gold); text-align:center;">لوحة الأبطال 🏆</h2>
+        <div id="leaderboard-content"></div>
+    </div>
+
+    <div id="info" class="page">
+        <h2 style="color:var(--gold);">قصة EnergyVerse ✨</h2>
+        <p style="color:#ccc; line-height:1.6;">بدأت رحلتنا في عام 2025 كحلم لربط عالم الألعاب بالعملات الرقمية. EnergyVerse ليست مجرد لعبة، بل هي محاكي لتعدين الطاقة في المستقبل، حيث كل ضغطة تقربك من امتلاك إمبراطوريتك الخاصة.</p>
+        
+        <h3 style="color:var(--gold); margin-top:30px;">تواصل معنا 🌐</h3>
+        <a href="#" class="stat-card" style="display:block; text-decoration:none; margin-bottom:10px;"><i class="fab fa-telegram"></i> قناة التلغرام الرسمية</a>
+        <a href="#" class="stat-card" style="display:block; text-decoration:none;"><i class="fab fa-tiktok"></i> مجتمع التيك توك</a>
+    </div>
+
+    <div class="nav-bar">
+        <div class="nav-item active" onclick="showPage('home', this)"><i class="fas fa-home"></i>الرئيسية</div>
+        <div class="nav-item" onclick="showPage('robots', this)"><i class="fas fa-robot"></i>الروبوتات</div>
+        <div class="nav-item" onclick="showPage('leader', this)"><i class="fas fa-trophy"></i>المتصدرين</div>
+        <div class="nav-item" onclick="showPage('info', this)"><i class="fas fa-info-circle"></i>عن اللعبة</div>
+    </div>
+
     <script src="app.js"></script>
 </body>
 </html>
