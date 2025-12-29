@@ -1,43 +1,32 @@
-// قراءة بيانات المستخدم من رابط البوت
 const params = new URLSearchParams(window.location.search);
 let balance = parseFloat(params.get("balance")) || 0;
 let lang = params.get("lang") || "ar";
 
-// تحديث عرض الرصيد
-const balanceDisplay = document.getElementById("balanceDisplay");
-balanceDisplay.innerText = `رصيدك: ${balance} IM`;
+// تحديث الواجهة
+document.getElementById("v-bal").innerText = balance.toFixed(2);
+if (lang === "he") document.body.style.direction = "ltr";
 
-// البطارية
-const batteryFill = document.getElementById("batteryFill");
-let batteryPercent = Math.min((balance / 100) * 100, 100);
-batteryFill.style.width = batteryPercent + "%";
+// الروبوتات
+const robots = [
+    { name: {ar: "المنقب الحديدي", he: "כורה ברזל"}, price: 10, prod: 1, icon: "fa-robot" },
+    { name: {ar: "كسارة الفولاذ", he: "מגרסת פלדה"}, price: 50, prod: 5, icon: "fa-microchip" }
+];
 
-// زر جمع الطاقة
-const collectBtn = document.getElementById("collectBtn");
-collectBtn.addEventListener("click", () => {
-  if (balance > 0) {
-    alert(`✅ تم جمع الطاقة: ${balance} IM`);
-    balance = 0;
-    balanceDisplay.innerText = `رصيدك: ${balance} IM`;
-    batteryFill.style.width = "0%";
-  } else {
-    alert("⚠️ لا يوجد طاقة لجمعها حالياً!");
-  }
+const rList = document.getElementById("robots-list");
+robots.forEach(r => {
+    rList.innerHTML += `
+        <div class="robot-card">
+            <div class="robot-icon"><i class="fas ${r.icon}"></i></div>
+            <div class="robot-info">
+                <h4>${lang === 'ar' ? r.name.ar : r.name.he}</h4>
+                <p>Prod: ${r.prod}/h</p>
+            </div>
+            <div class="robot-price">${r.price} IM</div>
+        </div>`;
 });
 
-// شراء الروبوتات
-const buyButtons = document.querySelectorAll(".buyBtn");
-buyButtons.forEach(btn => {
-  btn.addEventListener("click", () => {
-    const price = parseFloat(btn.getAttribute("data-price"));
-    if (balance >= price) {
-      balance -= price;
-      balanceDisplay.innerText = `رصيدك: ${balance} IM`;
-      alert(`🎉 تم شراء الروبوت! رصيدك الآن: ${balance} IM`);
-      batteryPercent = Math.min((balance / 100) * 100, 100);
-      batteryFill.style.width = batteryPercent + "%";
-    } else {
-      alert("❌ رصيدك غير كافٍ!");
-    }
-  });
-});
+// تأثير الضغط
+document.getElementById("collectBtn").onclick = () => {
+    window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+    alert(lang === 'ar' ? "تم جمع الطاقة!" : "האנרגיה נאספה!");
+};
