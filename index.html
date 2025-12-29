@@ -5,16 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/dist/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <title>EnergyVerse HD</title>
 </head>
 <body>
 
-    <div id="p-home" class="page" style="display:block; text-align:center; padding-top:40px;">
-        <h2 style="color:var(--gold); font-size:45px; margin:0;">0.00 IM</h2>
-        <div class="main-target" onclick="tg.HapticFeedback.impactOccurred('medium')">
+    <div id="p-home" class="page" style="display:block;">
+        <div class="header">
+            <h2 id="main-bal">0.00 IM</h2>
+            <div class="lvl-badge">LEVEL: PRO</div>
+        </div>
+        <div class="main-target" id="tap-target">
             <div class="bolt-glow"></div>
             <i class="fas fa-bolt"></i>
         </div>
-        <button style="width:80%; background:var(--gold); border:none; padding:20px; border-radius:15px; font-weight:bold; font-size:18px;">جمع الأرباح ⚡</button>
+        <div style="text-align:center;">
+            <button class="collect-btn" onclick="window.Telegram.WebApp.HapticFeedback.notificationOccurred('success')">جمع الأرباح ⚡</button>
+        </div>
     </div>
 
     <div id="p-robots" class="page" style="display:none;">
@@ -23,8 +29,8 @@
 
     <div id="p-info" class="page" style="display:none; padding:20px;">
         <h2 style="color:var(--gold);">EnergyVerse Story</h2>
-        <p style="color:#aaa; line-height:1.8;">في عام 2025، انهار النظام المالي العالمي، وبقيت الطاقة هي العملة الوحيدة المعترف بها. هنا تبدأ رحلتك في جمع الطاقة وبناء جيش من الروبوتات للسيطرة على المستقبل الرقمي.</p>
-        <div style="background:#111; padding:20px; border-radius:15px; margin-top:20px;">
+        <p style="color:#ccc; line-height:1.8;">في عام 2025، أصبحت الطاقة هي العملة الأقوى. ابدأ رحلتك الآن وسيطر على المستقبل الرقمي عبر بناء جيش من الروبوتات المتطورة.</p>
+        <div class="contact-box" style="background:#111; padding:20px; border-radius:15px; border:1px solid #222;">
             <h3 style="color:var(--neon);">Contact Us</h3>
             <p><i class="fab fa-telegram"></i> @EnergyVerse_Support</p>
             <p><i class="fab fa-tiktok"></i> EnergyVerse.Official</p>
