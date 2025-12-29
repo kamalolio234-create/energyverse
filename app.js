@@ -24,3 +24,20 @@ collectBtn.addEventListener("click", () => {
     alert("⚠️ لا يوجد طاقة لجمعها حالياً!");
   }
 });
+
+// شراء الروبوتات
+const buyButtons = document.querySelectorAll(".buyBtn");
+buyButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    const price = parseFloat(btn.getAttribute("data-price"));
+    if (balance >= price) {
+      balance -= price;
+      balanceDisplay.innerText = `رصيدك: ${balance} IM`;
+      alert(`🎉 تم شراء الروبوت! رصيدك الآن: ${balance} IM`);
+      batteryPercent = Math.min((balance / 100) * 100, 100);
+      batteryFill.style.width = batteryPercent + "%";
+    } else {
+      alert("❌ رصيدك غير كافٍ!");
+    }
+  });
+});
