@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EnergyVerse</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -18,16 +18,18 @@
             <div class="battery-container"><div id="energy-fill" class="battery-level"></div></div>
             <span id="energy-text" class="stat-value">0%</span>
         </div>
-        <div class="stat-box clickable" onclick="tg.showAlert('صفحة الروبوتات قريباً')">
+        <div class="stat-box">
             <span class="stat-label">الجيش الآلي</span>
-            <span class="stat-value">🤖 <span id="robot-count">0</span></span>
+            <span id="robot-count" class="stat-value">0</span>
         </div>
         <div class="stat-box">
             <span class="stat-label">الإحالات</span>
-            <span class="stat-value">👥 <span id="ref-count">0</span></span>
+            <span id="ref-count" class="stat-value">0</span>
         </div>
     </div>
-    <div class="robot-grid" id="robot-list"></div>
+
+    <div id="robot-list" class="robot-grid"></div>
+
     <script src="app.js"></script>
 </body>
 </html>
