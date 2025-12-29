@@ -1,32 +1,113 @@
-.robots-section {
-  margin-top: 40px;
+body {
+  background: linear-gradient(135deg, #0b0b0b, #111);
+  color: #FFD700;
+  font-family: 'Arial', sans-serif;
   text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  padding: 50px 20px;
+}
+
+h1 {
+  font-size: 3em;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 5px #00ff00;
+}
+
+.welcome {
+  font-size: 1.3em;
+  margin-bottom: 40px;
+}
+
+.energy-section {
+  margin-top: 20px;
+}
+
+button {
+  background-color: #00FF00;
+  border: none;
+  color: black;
+  padding: 15px 35px;
+  font-size: 1em;
+  cursor: pointer;
+  border-radius: 12px;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+button:hover {
+  background-color: #00cc00;
+  transform: scale(1.1);
+}
+
+#balanceDisplay {
+  margin-top: 20px;
+  font-size: 1.2em;
+}
+
+/* البطارية */
+.battery {
+  width: 250px;
+  height: 30px;
+  border: 3px solid #FFD700;
+  border-radius: 7px;
+  margin: 20px auto 0;
+  background: #222;
+  overflow: hidden;
+}
+
+.battery-fill {
+  height: 100%;
+  width: 0%;
+  background-color: #00FF00;
+  border-radius: 5px;
+  transition: width 0.5s ease-in-out;
+}
+
+/* المتجر */
+.robots-section {
+  margin-top: 50px;
+}
+
+.robots-section h2 {
+  font-size: 2em;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 3px #00ff00;
+}
+
+.robots-grid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
 .robot {
   background-color: #111;
   border: 2px solid #FFD700;
-  border-radius: 10px;
-  padding: 15px;
-  margin: 15px auto;
-  width: 250px;
+  border-radius: 12px;
+  padding: 20px;
+  width: 220px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.robot:hover {
+  transform: scale(1.05);
 }
 
 .robot p {
   margin: 5px 0;
+  font-size: 1em;
+}
+
+.robot-name {
+  font-weight: bold;
+  font-size: 1.1em;
 }
 
 .buyBtn {
-  background-color: #00FF00;
-  border: none;
-  color: black;
-  padding: 10px 20px;
-  font-size: 0.9em;
-  cursor: pointer;
-  border-radius: 5px;
   margin-top: 10px;
-}
-
-.buyBtn:hover {
-  background-color: #00cc00;
 }
